@@ -38,22 +38,43 @@ then
     # If rc_pass is correct then copy rc-file and add zone in rc-zone storage
     if [ $? -eq 0 ]
     then
+      echo "Success. Password is correct"
       while [ true ]
       do
-        echo "Please cpecify name of this RC-zone:"
-        read -r RC_ZONE
-        check_rc_zone "$RC_ZONE"
+        echo "Important: the RC-zone name must not contain space (' ') and colon (':') characters"
+        echo "Cpecify name of this RC-zone:"
+        read -r RC_ZONE_NAME
+
+        # Check rules for writing a name
+        # This rules described in ${RC_ZONE_CONFIG_PATH}/rc_zones file
+        check_rc_zone_name "$RC_ZONE_NAME"
+
+        # If name is correct
         if [ $? -eq 0 ]
         then
-          add_rc_zone "$RC_ZONE" "${PWD}/${1}" "$RC_PASS"
-          echo "RC-zone '${RC_ZONE}' successfully added"
-          exit 0
+          # Сhecking whether a RC_zone with the same name was created earlier
+          check_rc_zone "$RC_ZONE_NAME"
+
+          # If RC-zone with the same name wasn't created earlier
+          if [ $? -eq 0 ]
+          then
+            add_rc_zone "$RC_ZONE_NAME" "${PWD}/${1}" "$RC_PASS"
+            echo "RC-zone '${RC_ZONE_NAME}' successfully added"
+            exit 0
+          else
+            echo "This RC-zone has already been added"
+            echo "Try entering a different name"
+          fi
         else
-          echo "This RC-zone has already been added"
+          echo "RC-zone name is incorrect"
+          echo "The RC-zone name must not contain space (' ') and colon (':') characters"
           echo "Try entering a different name"
         fi
       done
     fi
+
+    # If rc_pass is incorrect (check_rc_pass isn't return 0)
+    echo "Password is incorrect. Try entering again"
   done
 
 # One arg and file (this arg) exists, but prog can't read it
@@ -64,6 +85,6 @@ then
 
 # Usage error
 else
-  echo -e "Usage error or file '$1' not found. Use:\nopstkhelp-add-rc -h"
+  echo -e "Usage error or file '$1' not found. \nUse:\nopstkhelp-add-rc --help"
   exit 1
 fi;

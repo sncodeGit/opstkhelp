@@ -14,7 +14,6 @@ source_rc_file(){
 check_rc_pass(){
   source_rc_file $1 $2
   STDERR=$(openstack server list 2>&1 1> /dev/null)
-  echo $STDERR
   if [ -z "$STDERR" ]
   then
     return 0
