@@ -1,2 +1,6 @@
-# Path to expect_pass.sh (and to source_rc.sh)
-EXPECT_PASS_PATH='./subfiles'
+#
+SUBFUNCTIONS_PATH='./subfiles'
+
+# RC-zone local storage vars
+RC_FILES_STORAGE_PATH='./tmp/rc-files'
+RC_ZONE_CONFIG_PATH='./tmp'
