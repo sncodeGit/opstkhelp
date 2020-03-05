@@ -13,7 +13,7 @@
 source init.sh
 
 # User need help
-if [ $# -eq 0 ] || [[ ("$1" == "-h" || "$1" == "--help") && $# -eq 1 ]]
+if [ "$#" -eq "0" ] || [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
 then
     echo -e "Usage: opstkhelp-add-rc [RC-FILE]"
     echo -e "Usage: opstkhelp-add-rc [OPTIONS]\n"
@@ -24,7 +24,7 @@ then
     exit 0
 
 # One arg and prog can read file (this arg)
-elif [ $# -eq 1 ] && [ -r "$1" ]
+elif [ "$#" -eq "1" ] && [ -r "$1" ]
 then
   while [ true ]
   do
@@ -35,7 +35,7 @@ then
     # check_pass - func in openstack_api_func.sh
     check_rc_pass "$RC_PASS" "${PWD}/${1}"
     # If rc_pass is correct then copy rc-file and add zone in the rc-zone storage
-    if [ $? -eq 0 ]
+    if [ "$?" -eq "0" ]
     then
       echo "Success. Password is correct"
       echo "Important: the RC-zone name must not contain space (' '), colon (':') and sharp ('#') characters"
@@ -48,15 +48,16 @@ then
         # This rules described in ${RC_ZONE_CONFIG_PATH}/rc_zones file
         # Also Сhecking whether a RC_zone with the same name was created earlier
         check_rc_zone "$RC_ZONE_NAME"
+        CHECK_RC_ZONE_RET="$?"
 
         # If rc-zone name is correct RC-zone with the same name wasn't created earlier
-        if [ $? -eq 0 ]
+        if [ "$CHECK_RC_ZONE_RET" -eq "0" ]
         then
           add_rc_zone "$RC_ZONE_NAME" "${PWD}/${1}" "$RC_PASS"
           echo "RC-zone '${RC_ZONE_NAME}' successfully added"
           exit 0
         # If name syntax is incorrect
-        elif [ $? -eq 1 ]
+        elif [ "$CHECK_RC_ZONE_RET" -eq "1" ]
         then
           echo "RC-zone name is incorrect"
           echo "The RC-zone name must not contain space (' '), colon (':') and sharp ('#') characters"
@@ -74,7 +75,7 @@ then
   done
 
 # One arg and file (this arg) exists, but prog can't read it
-elif [ $# -eq 1 ] && [ -f "$1" ]
+elif [ "$#" -eq "1" ] && [ -f "$1" ]
 then
   echo "The file was found, but the program cannot read it. Check file permissions"
   exit 1

@@ -13,7 +13,7 @@
 source init.sh
 
 # User need help
-if [ $# -eq 0 ] || [[ ("$1" == "-h" || "$1" == "--help") && $# -eq 1 ]]
+if [ "$#" -eq "0" ] || [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
 then
     echo -e "Usage: opstkhelp-remove-rc [RC-ZONE-NAME]"
     echo -e "Usage: opstkhelp-remove-rc [OPTIONS]\n"
@@ -24,19 +24,19 @@ then
     exit 0
 
 # One arg (zone-name)
-elif [ $# -eq 1 ]
+elif [ "$#" -eq "1" ]
 then
   # Search this rc-zone name in the rc-zones
-  check_rc_zone $1
+  check_rc_zone "$1"
   # If name wasn't found in rc-zones
-  if [ $? -eq 0 ]
+  if [ "$?" -eq "0" ]
   then
     echo -e "Zone '$1' wasn't found.\nTry to use:"
     echo -e "opsthelp-get-info"
     exit 1
   # If this zone was found
   else
-    remove_rc_zone $1
+    remove_rc_zone "$1"
     echo "Succesfully! Zone '$1' was removed"
   fi
 
