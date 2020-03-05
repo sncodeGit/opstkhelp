@@ -35,13 +35,13 @@ then
     # Try to use this password
     # check_pass - func in openstack_api_func.sh
     check_rc_pass "$RC_PASS" "${PWD}/${1}"
-    # If rc_pass is correct then copy rc-file and add zone in rc-zone storage
+    # If rc_pass is correct then copy rc-file and add zone in the rc-zone storage
     if [ $? -eq 0 ]
     then
       echo "Success. Password is correct"
+      echo "Important: the RC-zone name must not contain space (' '), colon (':') and sharp ('#') characters"
       while [ true ]
       do
-        echo "Important: the RC-zone name must not contain space (' ') and colon (':') characters"
         echo "Cpecify name of this RC-zone:"
         read -r RC_ZONE_NAME
 
@@ -67,7 +67,7 @@ then
           fi
         else
           echo "RC-zone name is incorrect"
-          echo "The RC-zone name must not contain space (' ') and colon (':') characters"
+          echo "The RC-zone name must not contain space (' '), colon (':') and sharp ('#') characters"
           echo "Try entering a different name"
         fi
       done
