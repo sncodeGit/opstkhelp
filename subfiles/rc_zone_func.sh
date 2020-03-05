@@ -4,13 +4,14 @@
 ### Return 0 if this name is correct
 ### Return 1 if this name is incorrect
 ### Usage: check_rc_zone_name [RC_ZONE_NAME]
+### Attention: not for use external
 check_rc_zone_name(){
-  # If RC_ZONE_NAME is empty
+   # If RC_ZONE_NAME is empty
   if [[ "$1" == "" ]]
   then
     return 1
   fi
-
+ 
   # If there is space (' ') in the RC_ZONE_NAME
   if [[ $1 == *' '* ]]
   then
@@ -28,7 +29,6 @@ check_rc_zone_name(){
   then
     return 1
   fi
-
   return 0
 }
 
@@ -39,7 +39,7 @@ check_rc_zone_name(){
 ### Return 2 if this zone was found in local storage
 ### Usage: check_rc_zone [RC_ZONE_NAME]
 check_rc_zone(){ 
-  check_rc_zone_name $1
+  check_rc_zone_name "$1"
   if [ $? -eq 1 ]
   then
     return 1
@@ -59,9 +59,8 @@ check_rc_zone(){
 ### Add a new RC-zone 
 ### Returns nothing
 ### Usage: add_rc_zone [RC_ZONE_NAME] [RC_FILE] [RC_PASS]
-### Attention: don't check rc-zone name (use check_rc_zone and check_rc_zone_name func)
+### Attention: don't check rc-zone name (use check_rc_zone func)
 add_rc_zone(){
-# check_rc_zone $1
   echo -en "\n$1:$3" >> ${RC_ZONE_CONFIG_PATH}/rc-zones
   cp $2 $RC_FILES_STORAGE_PATH/$1.sh
 }
@@ -69,5 +68,5 @@ add_rc_zone(){
 ### Remove RC-zone
 ### Attention: don't check rc-zone name (use check_rc_zone func)
 remove_rc_zone(){
-
+  echo
 }
