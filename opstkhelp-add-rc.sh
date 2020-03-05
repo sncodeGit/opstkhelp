@@ -1,17 +1,13 @@
 #!/bin/bash
 
-### This prog need to add rc-file in programm loacal storage
+### This prog need to add rc-zone in programm local storage
 ### Functionality:
 ### 1) Print help : opstkhelp-add-rc -h, --help
-### 2) Add rc-file:  opstkhelp-add-rc RC_FILE
+### 2) Add rc-zone:  opstkhelp-add-rc RC_FILE
 ### Other usage should return an error
 
-# Add some shared vars
-source vars.sh
-# Add some func for work with Openstack API
-source ${SUBFUNCTIONS_PATH}/openstack_api_func.sh
-# Add some func for work with local rc-zone storage
-source ${SUBFUNCTIONS_PATH}/rc_zone_func.sh
+# Add shared for all prog from package (for all opstkhelp-*)
+source init.sh
 
 # User need help
 if [ $# -eq 0 ] || [[ ("$1" == "-h" || "$1" == "--help") && $# -eq 1 ]]
