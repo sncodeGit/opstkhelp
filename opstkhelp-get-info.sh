@@ -9,3 +9,4 @@
 
 # Add shared for all prog from package (for all opstkhelp-*)
 source init.sh
+

@@ -6,6 +6,9 @@
 ### 2) Add rc-zone:  opstkhelp-add-rc RC_FILE
 ### Other usage should return an error
 
+### [Read pass] -> [Check pass] -> [Read zone name] -> [Check zone name] ->
+### [Add zone name to rc-zones] -> [Copy rc-file to local storage]
+
 # Add shared for all prog from package (for all opstkhelp-*)
 source init.sh
 
@@ -14,7 +17,7 @@ if [ $# -eq 0 ] || [[ ("$1" == "-h" || "$1" == "--help") && $# -eq 1 ]]
 then
     echo -e "Usage: opstkhelp-add-rc [RC-FILE]"
     echo -e "Usage: opstkhelp-add-rc [OPTIONS]\n"
-    echo -e "Add new RC-File to the storage\n"
+    echo -e "Add new RC-zone to the local storage\n"
     echo -e "[RC-FILE] - path to target rc-file\n"
     echo -e "[OPTIONS]:"
     echo -e "-h, --help          Get this page"
@@ -43,27 +46,24 @@ then
 
         # Check rules for writing a name
         # This rules described in ${RC_ZONE_CONFIG_PATH}/rc_zones file
-        check_rc_zone_name "$RC_ZONE_NAME"
+        # Also Сhecking whether a RC_zone with the same name was created earlier
+        check_rc_zone "$RC_ZONE_NAME"
 
-        # If name is correct
+        # If rc-zone name is correct RC-zone with the same name wasn't created earlier
         if [ $? -eq 0 ]
         then
-          # Сhecking whether a RC_zone with the same name was created earlier
-          check_rc_zone "$RC_ZONE_NAME"
-
-          # If RC-zone with the same name wasn't created earlier
-          if [ $? -eq 0 ]
-          then
-            add_rc_zone "$RC_ZONE_NAME" "${PWD}/${1}" "$RC_PASS"
-            echo "RC-zone '${RC_ZONE_NAME}' successfully added"
-            exit 0
-          else
-            echo "This RC-zone has already been added"
-            echo "Try entering a different name"
-          fi
-        else
+          add_rc_zone "$RC_ZONE_NAME" "${PWD}/${1}" "$RC_PASS"
+          echo "RC-zone '${RC_ZONE_NAME}' successfully added"
+          exit 0
+        # If name syntax is incorrect
+        elif [ $? -eq 1 ]
+        then
           echo "RC-zone name is incorrect"
           echo "The RC-zone name must not contain space (' '), colon (':') and sharp ('#') characters"
+          echo "Try entering a different name"
+        # If zone with the same name was found in rc-zones file (return code: 2)
+        else
+          echo "This RC-zone has already been added"
           echo "Try entering a different name"
         fi
       done
