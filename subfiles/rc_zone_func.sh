@@ -6,25 +6,25 @@
 ### Usage: check_rc_zone_name [RC_ZONE_NAME]
 check_rc_zone_name(){
   # If RC_ZONE_NAME is empty
-  if [ "$1" == "" ]
+  if [[ "$1" == "" ]]
   then
     return 1
   fi
 
   # If there is space (' ') in the RC_ZONE_NAME
-  if [ $(expr match "$1" ".* .*") -ne 0 ]
+  if [[ $1 == *' '* ]]
   then
     return 1
   fi
 
   # If there is colon (':') in the RC_ZONE_NAME
-  if [ $(expr match "$1" ".*:.*") -ne 0 ]
+  if [[ $1 == *':'* ]]
   then
     return 1
   fi
   
   # If there is sharp ('#') in the RC_ZONE_NAME
-  if [ $(expr match "$1" ".*#.*") -ne 0 ]
+  if [[ $1 == *'#'* ]]
   then
     return 1
   fi
