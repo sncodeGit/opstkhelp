@@ -1,10 +1,32 @@
+### Get the names of all added rc-zones
+### Gets the names from rc-zones file
+### Return GET_ALL_ZONES var with the following sintax:
+### ***
+### FIRST_NAME
+### SECOND_NAME
+### ... (etc.)
+### ***
+### Usage: get_all_zones
+get_all_zones(){
+  # Remove comments and empty strings from rc-zones file
+  # Then read all symbols to first ':' symbol
+  GET_ALL_ZONES=$(cat ${RC_ZONE_CONFIG_PATH}/rc-zones | sed -r '/^ *#/d' | sed -r '/^$/d' | cut -d ':' -f 1)
+}
+
+### Get the rc-zone password
+### Gets the password from rc-zones file
+### Return GET_ZONE_PASS var containing password
+### Usage: get_zone_pass [RC_ZONE_NAME]
+get_zone_pass(){
+  GET_ZONE_PASS=$(cat ${RC_ZONE_CONFIG_PATH}/rc-zones | grep "^${1}:" | sed -r "s/^${1}://")
+}
+
 ### Check rc-zone name to correctness
 ### Using rules described in ${RC_ZONE_CONFIG_PATH}/rc_zones file
 ### Also checks if an empty string was passed
 ### Return 0 if this name is correct
 ### Return 1 if this name is incorrect
 ### Usage: check_rc_zone_name [RC_ZONE_NAME]
-### Attention: not for use external
 check_rc_zone_name(){
   # If RC_ZONE_NAME is empty
   if [[ "$1" == "" ]]
@@ -38,9 +60,9 @@ check_rc_zone_name(){
 ### Return 1 if this rc-zone name was found
 ### Usage : find_rc_zone [RC_ZONE_NAME]
 find_rc_zone(){
-  # Remove comments and empty strings from rc-zones file
-  ZONE_NAMES=$(cat ${RC_ZONE_CONFIG_PATH}/rc-zones | sed -r '/^ *#/d' | sed -r '/^$/d' | cut -d ':' -f 1)
-  for ZONE_NAME in $ZONE_NAMES
+  get_all_zones # Return values in the GET_ALL_ZONES var
+
+  for ZONE_NAME in $GET_ALL_ZONES
   do
     if [ "$ZONE_NAME" = "$1" ]
     then
@@ -50,7 +72,7 @@ find_rc_zone(){
   return 0
 }
 
-### Check for a buse RC-zone name (find_rc_zone)
+### Check for a busy RC-zone name (find_rc_zone)
 ### Also check rc-zone name to correctness according rc_zones (see check_rc_zone_name func)
 ### Return 0 if this zone wasn't added earlier and also the name itself is correct
 ### Return 1 if this zone name is incorrect according check_rc_zone_name func
@@ -66,7 +88,7 @@ check_rc_zone(){
     return 1
   fi
 
-  # Check zone name for a buse
+  # Check zone name for a busy
   find_rc_zone "$1"
 
   # If zone name was added earlier
@@ -76,6 +98,45 @@ check_rc_zone(){
   fi
 
   return 0
+}
+
+### Check password of added rc-zone (according to check_rc_pass func)
+### Return 0 if password is correct
+### Return 1 if password is incorrect
+### Usage: check_zone_pass [RC_ZONE_NAME]
+check_zone_pass(){
+  # Get password of this zone
+  get_zone_pass "$1" # Return GET_ZONE_PASS var
+
+  # Check password of this zone
+  check_rc_pass "$GET_ZONE_PASS" "${RC_FILES_STORAGE_PATH}/${1}.sh"
+  
+  # If password is correct
+  if [ "$?" -eq 0 ]
+  then
+    return 0
+  else
+    return 1
+  fi
+}
+
+### Get all servers from target rc-zone
+### Return GET_ZONE_SERVERS var with the following sintax:
+### *** 
+### FIRST_SERVER
+### SECOND_SERVER
+### ... (etc.)
+### ***
+### Usage: get_zone_servers [RC_ZONE_NAME]
+get_zone_servers(){
+  # Get password of this zone
+  get_zone_pass "$1" # Return GET_ZONE_PASS var
+
+  # Get all servers from target rc-zone
+  # Return GET_ALL_SERVERS var
+  get_all_servers "$GET_ZONE_PASS" "${RC_FILES_STORAGE_PATH}/${1}.sh"
+
+  GET_ZONE_SERVERS="$GET_ALL_SERVERS"
 }
 
 ### Add a new RC-zone 

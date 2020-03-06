@@ -17,13 +17,13 @@ source init.sh
 # User need help
 if [ "$#" -eq "0" ] || [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
 then
-    echo -e "Usage: opstkhelp-add-rc [RC-FILE]"
-    echo -e "Usage: opstkhelp-add-rc [OPTIONS]\n"
-    echo -e "Add new RC-zone to the local storage\n"
-    echo -e "[RC-FILE] - path to target rc-file\n"
-    echo -e "[OPTIONS]:"
-    echo -e "-h, --help          Get this page"
-    exit 0
+  echo -e "Usage: opstkhelp-add-rc [RC-FILE]"
+  echo -e "Usage: opstkhelp-add-rc [OPTIONS]\n"
+  echo -e "Add new RC-zone to the local storage\n"
+  echo -e "[RC-FILE] - path to target rc-file\n"
+  echo -e "[OPTIONS]:"
+  echo -e "-h, --help          Get this page"
+  exit 0
 
 # One arg and prog can read file (this arg)
 elif [ "$#" -eq "1" ] && [ -r "$1" ]
@@ -79,11 +79,11 @@ then
 # One arg and file (this arg) exists, but prog can't read it
 elif [ "$#" -eq "1" ] && [ -f "$1" ]
 then
-  echo "The file was found, but the program cannot read it. Check file permissions"
+  echo "The file was found, but the program cannot read it. Check file permissions" >&2
   exit 1
 
 # Usage error
 else
-  echo -e "Usage error or file '$1' not found. \nUse:\nopstkhelp-add-rc --help"
+  echo -e "Usage error or file '$1' not found. \nUse:\nopstkhelp-add-rc --help" >&2
   exit 1
 fi;

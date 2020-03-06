@@ -15,13 +15,13 @@ source init.sh
 # User need help
 if [ "$#" -eq "0" ] || [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
 then
-    echo -e "Usage: opstkhelp-remove-rc [RC-ZONE-NAME]"
-    echo -e "Usage: opstkhelp-remove-rc [OPTIONS]\n"
-    echo -e "Remove RC-zone from the local storage\n"
-    echo -e "[RC-ZONE-NAME] - name of the target RC-zone\n"
-    echo -e "[OPTIONS]:"
-    echo -e "-h, --help          Get this page"
-    exit 0
+  echo -e "Usage: opstkhelp-remove-rc [RC-ZONE-NAME]"
+  echo -e "Usage: opstkhelp-remove-rc [OPTIONS]\n"
+  echo -e "Remove RC-zone from the local storage\n"
+  echo -e "[RC-ZONE-NAME] - name of the target RC-zone\n"
+  echo -e "[OPTIONS]:"
+  echo -e "-h, --help          Get this page"
+  exit 0
 
 # One arg (zone-name)
 elif [ "$#" -eq "1" ]
@@ -31,8 +31,8 @@ then
   # If name wasn't found in rc-zones files
   if [ "$?" -eq "0" ]
   then
-    echo -e "Zone '$1' wasn't found.\nTry to use:"
-    echo -e "opsthelp-get-info"
+    echo -e "Zone '$1' wasn't found.\nTry to use:" >&2
+    echo -e "opsthelp-get-info" >&2
     exit 1
   # If this zone was found
   else
@@ -43,6 +43,6 @@ then
 
 # Usage error
 else
-  echo -e "Usage error.\nUse:\nopstkhelp-remove-rc --help"
+  echo -e "Usage error.\nUse:\nopstkhelp-remove-rc --help" >&2
   exit 1
 fi

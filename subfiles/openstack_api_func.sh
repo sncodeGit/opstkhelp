@@ -8,8 +8,8 @@ source_rc_file(){
 }
 
 ### Check password (first argument) RC-file for correctness
-### Return 1 if password is correct
-### Return 0 if password isn't correct
+### Return 0 if password is correct
+### Return 1 if password is incorrect
 ### Usage: chek_rc_pass [RC_PASS] [RC_FILE]
 check_rc_pass(){
   source_rc_file "$1" "$2"
@@ -20,4 +20,17 @@ check_rc_pass(){
   else
     return 1
   fi
+}
+
+### Get all servers using rc-file
+### Return GET_ALL_SERVERS var with the following sintax:
+### ***
+### FIRST_SERVER
+### SECOND_SERVER
+### ... (etc.)
+### ***
+### Usage: get_all_servers [RC_PASS] [RC_FILE]
+get_all_servers(){
+  source_rc_file "$1" "$2"
+  GET_ALL_SERVERS=$(openstack server list --column Name --format value --sort-column Name)
 }
