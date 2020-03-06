@@ -9,7 +9,7 @@
 ### [Read zone name] -> [Remove this zone record from rc-zones] ->
 ### [Delete this zone rc-file]
 
-# Add shared for all prog from package (for all opstkhelp-*)
+# Add shared for all prog from package (for all opstkhelp-*) funcs and vars
 source init.sh
 
 # User need help
@@ -26,9 +26,9 @@ then
 # One arg (zone-name)
 elif [ "$#" -eq "1" ]
 then
-  # Search this rc-zone name in the rc-zones
-  check_rc_zone "$1"
-  # If name wasn't found in rc-zones
+  # Search this rc-zone name in the rc-zones file
+  find_rc_zone "$1"
+  # If name wasn't found in rc-zones files
   if [ "$?" -eq "0" ]
   then
     echo -e "Zone '$1' wasn't found.\nTry to use:"
@@ -38,6 +38,7 @@ then
   else
     remove_rc_zone "$1"
     echo "Succesfully! Zone '$1' was removed"
+    exit 0
   fi
 
 # Usage error

@@ -5,11 +5,13 @@
 ### 1) Print help : opstkhelp-add-rc -h, --help
 ### 2) Add rc-zone:  opstkhelp-add-rc RC_FILE
 ### Other usage should return an error
+### Special usage error:
+### 1) One argument is a file, but prog can't read it
 
 ### [Read pass] -> [Check pass] -> [Read zone name] -> [Check zone name] ->
 ### [Add zone name to rc-zones] -> [Copy rc-file to local storage]
 
-# Add shared for all prog from package (for all opstkhelp-*)
+# Add shared for all prog from package (for all opstkhelp-*) funcs and vars
 source init.sh
 
 # User need help
