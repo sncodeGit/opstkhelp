@@ -1,5 +1,11 @@
 #!/bin/bash
 
+### This prog need to provide the user with the ability to use all the functionality of Openstack API
+### Functionality:
+### 1) Print help : opstkhelp-get-info -h, --help
+### 2) Switching to the interactive mode: opstkhelp-get-info RC_ZONE_NAME (user enter his command himself)
+### Other usage should return an error
+
 # Add shared for all prog from package (for all opstkhelp-*)
 source init.sh
 
@@ -39,7 +45,16 @@ then
     if [ "$?" -eq "0" ]
     then
       source_rc_zone "$1"
-      #NP Здесь работа с запросами к Openstack API
+      
+      # Interactive console for work with openstack API
+      echo "Enter 'exit' for exit from interactive mode"
+      while [ true ]
+      do
+        echo -n "[${1}]> "
+        read USER_INPUT
+        eval $USER_INPUT
+      done
+
       exit 0
 
     else
@@ -50,4 +65,9 @@ then
       exit 1
     fi
   fi
+
+# Usage error
+else
+  echo -e "Usage error.\nUse:\nopstkhelp-source-rc --help" >&2
+  exit 1
 fi

@@ -147,7 +147,7 @@ source_rc_zone(){
   get_zone_pass "$1" # Return GET_ZONE_PASS var
 
   # Source ('.') rc-file of this rc-file
-  source_rc_file "$?" "${RC_FILES_STORAGE_PATH}/${1}.sh"
+  source_rc_file "$GET_ZONE_PASS" "${RC_FILES_STORAGE_PATH}/${1}.sh"
 }
 
 ### Add a new RC-zone 
