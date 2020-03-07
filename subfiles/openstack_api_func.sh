@@ -25,12 +25,12 @@ check_rc_pass(){
 ### Get all servers using rc-file
 ### Return GET_ALL_SERVERS var with the following sintax:
 ### ***
-### FIRST_SERVER
-### SECOND_SERVER
+### FIRST_SERVER FIRST_SERVER_STATUS
+### SECOND_SERVER SECOND_SERVER_STATUS
 ### ... (etc.)
 ### ***
 ### Usage: get_all_servers [RC_PASS] [RC_FILE]
 get_all_servers(){
   source_rc_file "$1" "$2"
-  GET_ALL_SERVERS=$(openstack server list --column Name --format value --sort-column Name)
+  GET_ALL_SERVERS=$(openstack server list --column Name --column Status --format value --sort-column Name)
 }

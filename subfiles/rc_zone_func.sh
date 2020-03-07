@@ -139,6 +139,17 @@ get_zone_servers(){
   GET_ZONE_SERVERS="$GET_ALL_SERVERS"
 }
 
+### Source (alias command - '.') zone with name passed as arh
+### Returns nothing
+### Usage: source_rc_zone [RC_ZONE_NAME]
+source_rc_zone(){
+  # Get password of this zone
+  get_zone_pass "$1" # Return GET_ZONE_PASS var
+
+  # Source ('.') rc-file of this rc-file
+  source_rc_file "$?" "${RC_FILES_STORAGE_PATH}/${1}.sh"
+}
+
 ### Add a new RC-zone 
 ### Returns nothing
 ### Usage: add_rc_zone [RC_ZONE_NAME] [RC_FILE] [RC_PASS]
