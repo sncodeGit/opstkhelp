@@ -120,11 +120,26 @@ check_zone_pass(){
   fi
 }
 
-### Get all servers from target rc-zone
+### Renew servers list (the corresponding file in the directory servers-lists)
+### Rewrite target file writing a more recent list of servers
+### Returns nothing
+### Usage: renew_servers_list [RC_ZONE_NAME] [SERVERS_LIST]
+### [SERVERS_LIST] format:
+### ***
+### FIRST_SERVER_NAME
+### SECOND_SERVER_NAME
+### ...
+### ***
+renew_servers_list(){
+  # Rewrite target file
+  echo -n "${2}" > ${SERVERS_LISTS_STORAGE_PATH}/${1}-servers
+}
+
+### Get all servers from target rc-zone and their statuses
 ### Return GET_ZONE_SERVERS var with the following sintax:
 ### *** 
-### FIRST_SERVER
-### SECOND_SERVER
+### FIRST_SERVER FIRST_SERVER_STATUS
+### SECOND_SERVER SECOND_SERVER_STATUS
 ### ... (etc.)
 ### ***
 ### Usage: get_zone_servers [RC_ZONE_NAME]
@@ -135,6 +150,10 @@ get_zone_servers(){
   # Get all servers from target rc-zone
   # Return GET_ALL_SERVERS var
   get_all_servers "$GET_ZONE_PASS" "${RC_FILES_STORAGE_PATH}/${1}.sh"
+
+  # Renew servers list for this rc-zone
+  ZONE_SERVERS_NAMES=$(echo -n "${GET_ALL_SERVERS}" | cut -d ' ' -f 1)
+  renew_servers_list "$1" "$ZONE_SERVERS_NAMES"
 
   GET_ZONE_SERVERS="$GET_ALL_SERVERS"
 }
