@@ -22,7 +22,7 @@ then
   echo -e "Add new RC-zone to the local storage\n"
   echo -e "[RC-FILE] - path to target rc-file\n"
   echo -e "[OPTIONS]:"
-  echo -e "-h, --help          Get this page"
+  echo -e "-h, --help            Get this page"
   exit 0
 
 # One arg and prog can read file (this arg)

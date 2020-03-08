@@ -13,7 +13,7 @@ source_rc_file(){
 ### Usage: chek_rc_pass [RC_PASS] [RC_FILE]
 check_rc_pass(){
   source_rc_file "$1" "$2"
-  STDERR=$(openstack server list 2>&1 1> /dev/null)
+  STDERR=$(openstack server list --column Name --format value --sort-column Name 2>&1 1> /dev/null)
   if [ -z "$STDERR" ]
   then
     return 0

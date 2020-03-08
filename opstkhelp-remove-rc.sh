@@ -20,7 +20,7 @@ then
   echo -e "Remove RC-zone from the local storage\n"
   echo -e "[RC-ZONE-NAME] - name of the target RC-zone\n"
   echo -e "[OPTIONS]:"
-  echo -e "-h, --help          Get this page"
+  echo -e "-h, --help            Get this page"
   exit 0
 
 # One arg (zone-name)

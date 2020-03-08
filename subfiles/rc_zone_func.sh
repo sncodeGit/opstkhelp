@@ -120,22 +120,23 @@ check_zone_pass(){
   fi
 }
 
-### Renew servers list (the corresponding file in the directory servers-lists)
+### Update servers list (the corresponding file in the directory servers-lists)
 ### Rewrite target file writing a more recent list of servers
 ### Returns nothing
-### Usage: renew_servers_list [RC_ZONE_NAME] [SERVERS_LIST]
+### Usage: update_servers_list [RC_ZONE_NAME] [SERVERS_LIST]
 ### [SERVERS_LIST] format:
 ### ***
 ### FIRST_SERVER_NAME
 ### SECOND_SERVER_NAME
 ### ...
 ### ***
-renew_servers_list(){
+update_servers_list(){
   # Rewrite target file
   echo -n "${2}" > ${SERVERS_LISTS_STORAGE_PATH}/${1}-servers
 }
 
 ### Get all servers from target rc-zone and their statuses
+### And update servers list of target rc-zone
 ### Return GET_ZONE_SERVERS var with the following sintax:
 ### *** 
 ### FIRST_SERVER FIRST_SERVER_STATUS
@@ -151,9 +152,9 @@ get_zone_servers(){
   # Return GET_ALL_SERVERS var
   get_all_servers "$GET_ZONE_PASS" "${RC_FILES_STORAGE_PATH}/${1}.sh"
 
-  # Renew servers list for this rc-zone
+  # Update servers list for this rc-zone
   ZONE_SERVERS_NAMES=$(echo -n "${GET_ALL_SERVERS}" | cut -d ' ' -f 1)
-  renew_servers_list "$1" "$ZONE_SERVERS_NAMES"
+  update_servers_list "$1" "$ZONE_SERVERS_NAMES"
 
   GET_ZONE_SERVERS="$GET_ALL_SERVERS"
 }
@@ -170,6 +171,7 @@ source_rc_zone(){
 }
 
 ### Add a new RC-zone 
+### Update servers-list of adding rc-zone
 ### Returns nothing
 ### Usage: add_rc_zone [RC_ZONE_NAME] [RC_FILE] [RC_PASS]
 ### Attention: don't check rc-zone name (use check_rc_zone func)
@@ -182,6 +184,9 @@ add_rc_zone(){
 
   # Create new server list file in the servers-lists storage
   touch ${SERVERS_LISTS_STORAGE_PATH}/${1}-servers
+
+  # Initialization server list
+  get_zone_servers "$1"
 }
 
 ### Remove RC-zone from rc-zones file and rc-file from local storage
@@ -197,7 +202,7 @@ remove_rc_zone(){
   # Accordingly an empty string will appear between
   # the next line to be added and the next to last one
   # The following code fixes this
-  # [Get last line from rc-zones] -> [Delete last line]
+  # [Get last line from rc-zones] -> [Delete last line] ->
   # -> [Write last line excluding special characters (\n)]
   LAST_LINE=$(sed -n '$p' tmp/rc-zones)
   sed -i '$d' tmp/rc-zones

@@ -20,7 +20,7 @@ then
   echo -e "To exit interactive mode, use:\nexit\n"
   echo -e "[RC-ZONE-NAME] - name of the target RC-zone\n"
   echo -e "[OPTIONS]:"
-  echo -e "-h, --help          Get this page"
+  echo -e "-h, --help            Get this page"
   exit 0
 
 # Source rc-file of the zone passed as an argument ($1)
