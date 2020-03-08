@@ -1,0 +1,6 @@
+### Opstkhelp-tools
+### This directory stores RC-files for added RC-zones
+### For all RC-zones defined in ${RC_ZONE_CONFIG_PATH}/rc_zones file
+### this directory must contain a file
+### Filename format: {RC_ZONE_NAME}.sh
+### It is not recommended to edit rc-files manually

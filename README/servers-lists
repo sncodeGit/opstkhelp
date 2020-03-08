@@ -1,0 +1,14 @@
+### Opstkhelp-tools
+### This directory stores servers lists
+### A separate file is created for each zone
+### That contains a list of servers in this zone known as opstkhelp-utils
+### Filename format: {RC_ZONE_NAME}-servers
+### The files specifies the server names
+### Each name is written in a separate line
+### Example:
+### ***
+### FIRST_SERVER
+### SECOND_SERVER
+### ...
+### ***
+### Attention: it is not recommended to edit servers-lists manually

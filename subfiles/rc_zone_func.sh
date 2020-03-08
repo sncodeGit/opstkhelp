@@ -155,14 +155,38 @@ source_rc_zone(){
 ### Usage: add_rc_zone [RC_ZONE_NAME] [RC_FILE] [RC_PASS]
 ### Attention: don't check rc-zone name (use check_rc_zone func)
 add_rc_zone(){
+  # Add record to the rc-zones file
   echo -en "\n$1:$3" >> "${RC_ZONE_CONFIG_PATH}/rc-zones"
+
+  # Add rc-file to the rc-files storage
   cp "$2" "$RC_FILES_STORAGE_PATH/$1.sh"
+
+  # Create new server list file in the servers-lists storage
+  touch ${SERVERS_LISTS_STORAGE_PATH}/${1}-servers
 }
 
 ### Remove RC-zone from rc-zones file and rc-file from local storage
 ### Returns nothing
 ### Usage: remove_rc_zone [RC_ZONE_NAME]
 remove_rc_zone(){
+  # Remove record from rc-zone file
   sed -ri "/^${1}:.*$/d" "${RC_ZONE_CONFIG_PATH}/rc-zones"
+  # If you add \n to the end of the line
+  # before the line being added, a problem occurs (add_rc_zone func)
+  # If you remove the last string from rc-zones file
+  # then the line wrap (\n) is not deleted
+  # Accordingly an empty string will appear between
+  # the next line to be added and the next to last one
+  # The following code fixes this
+  # [Get last line from rc-zones] -> [Delete last line]
+  # -> [Write last line excluding special characters (\n)]
+  LAST_LINE=$(sed -n '$p' tmp/rc-zones)
+  sed -i '$d' tmp/rc-zones
+  echo -n ${LAST_LINE} >> tmp/rc-zones
+
+  # Remove rc-file from rc-files storage
   rm ${RC_FILES_STORAGE_PATH}/${1}.sh
+
+  # Remove server list file from the servers-lists storage
+  rm ${SERVERS_LISTS_STORAGE_PATH}/${1}-servers
 }
