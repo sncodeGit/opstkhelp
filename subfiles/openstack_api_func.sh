@@ -2,9 +2,7 @@
 ### Returns nothing
 ### Usage: source_rc_file [RC_PASS] [RC_FILE]
 source_rc_file(){
-  echo "$1" > /tmp/opstkhelp_pass
-  source "$2" &> /dev/null < /tmp/opstkhelp_pass
-  rm /tmp/opstkhelp_pass
+  source "$2" &> /dev/null <<< "$1"
 }
 
 ### Check password (first argument) RC-file for correctness
