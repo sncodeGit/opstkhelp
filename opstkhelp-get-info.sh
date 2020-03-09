@@ -7,7 +7,7 @@
 ### 3) Display the names of all the servers (and their statuses) that are located in this RC-zone: opstkhelp-get-info RC_ZONE_NAME
 ### Other usage should return an error
 
-# Add shared for all prog from package (for all opstkhelp-*)
+# Add shared for all prog from package (for all opstkhelp-*) vars and performs general functions
 source init.sh
 
 # User need help

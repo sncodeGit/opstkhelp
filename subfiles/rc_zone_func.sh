@@ -9,8 +9,7 @@
 ### Usage: get_all_zones
 get_all_zones(){
   # Remove comments and empty strings from rc-zones file
-  # Then read all symbols to first ':' symbol
-  GET_ALL_ZONES=$(cat ${RC_ZONE_CONFIG_PATH}/rc-zones | sed -r '/^ *#/d' | sed -r '/^$/d' | cut -d ':' -f 1)
+  GET_ALL_ZONES=$(cat ${RC_ZONE_CONFIG_PATH}/rc-zones | sed -r '/^ *#/d' | sed -r '/^$/d')
 }
 
 ### Get the rc-zone password
@@ -18,7 +17,8 @@ get_all_zones(){
 ### Return GET_ZONE_PASS var containing password
 ### Usage: get_zone_pass [RC_ZONE_NAME]
 get_zone_pass(){
-  GET_ZONE_PASS=$(cat ${RC_ZONE_CONFIG_PATH}/rc-zones | grep "^${1}:" | sed -r "s/^${1}://")
+  ENCODED_PASS=$(cat ${PASSWORDS_STORAGE_PATH}/${1}-password)
+  GET_ZONE_PASS=$(echo -n "$ENCODED_PASS" | openssl enc -d -aes-256-cbc -pbkdf2 -pass "pass:${OPSTKHELP_PASSWORD}")
 }
 
 ### Check rc-zone name to correctness
@@ -36,12 +36,6 @@ check_rc_zone_name(){
  
   # If there is space (' ') in the RC_ZONE_NAME
   if [[ "$1" == *' '* ]]
-  then
-    return 1
-  fi
-
-  # If there is colon (':') in the RC_ZONE_NAME
-  if [[ "$1" == *':'* ]]
   then
     return 1
   fi
@@ -177,7 +171,12 @@ source_rc_zone(){
 ### Attention: don't check rc-zone name (use check_rc_zone func)
 add_rc_zone(){
   # Add record to the rc-zones file
-  echo -en "\n$1:$3" >> "${RC_ZONE_CONFIG_PATH}/rc-zones"
+  echo -en "\n$1" >> "${RC_ZONE_CONFIG_PATH}/rc-zones"
+
+  # Add file with password of this rc-zone in rc-passwords storage
+  touch ${PASSWORDS_STORAGE_PATH}/${1}-password
+  ENCODED_PASS=$(echo -n "$3" | openssl enc -aes-256-cbc -salt -pbkdf2 -pass "pass:${OPSTKHELP_PASSWORD}")
+  echo -n "$ENCODED_PASS" > ${PASSWORDS_STORAGE_PATH}/${1}-password
 
   # Add rc-file to the rc-files storage
   cp "$2" "$RC_FILES_STORAGE_PATH/$1.sh"
@@ -194,7 +193,7 @@ add_rc_zone(){
 ### Usage: remove_rc_zone [RC_ZONE_NAME]
 remove_rc_zone(){
   # Remove record from rc-zone file
-  sed -ri "/^${1}:.*$/d" "${RC_ZONE_CONFIG_PATH}/rc-zones"
+  sed -ri "/^${1}.*$/d" "${RC_ZONE_CONFIG_PATH}/rc-zones"
   # If you add \n to the end of the line
   # before the line being added, a problem occurs (add_rc_zone func)
   # If you remove the last string from rc-zones file
@@ -207,6 +206,9 @@ remove_rc_zone(){
   LAST_LINE=$(sed -n '$p' tmp/rc-zones)
   sed -i '$d' tmp/rc-zones
   echo -n ${LAST_LINE} >> tmp/rc-zones
+
+  # Remove file with password of this rc-zone from rc-passwords storage
+  rm ${PASSWORDS_STORAGE_PATH}/${1}-password
 
   # Remove rc-file from rc-files storage
   rm ${RC_FILES_STORAGE_PATH}/${1}.sh

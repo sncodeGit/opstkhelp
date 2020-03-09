@@ -1,7 +1,10 @@
 ### Opstkhelp-tools
-### This file stores rc-zone and passwords for the corresponding RC-files
+### This file stores rc-zones names
 ### Syntax:
-### {RC_ZONE_NAME}:{RC_FILE_PASSWORD}
+### ***
+### FIRST_RC_ZONE_NAME
+### SECOND_RC_ZONE_NAME
+### ...
+### ***
 ### Vars limitations:
-### {RC_ZONE_NAME} must not contain spaces (' '), colons (':') or sharp ('#')
-### {RC_FILE_PASSWORD} can contain any characters
+### {RC_ZONE_NAME} must not contain spaces (' ') or sharp ('#')

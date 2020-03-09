@@ -11,7 +11,7 @@
 ### [Read pass] -> [Check pass] -> [Read zone name] -> [Check zone name] ->
 ### [Add zone name to rc-zones] -> [Copy rc-file to local storage]
 
-# Add shared for all prog from package (for all opstkhelp-*) funcs and vars
+# Add shared for all prog from package (for all opstkhelp-*) vars and performs general functions
 source init.sh
 
 # User need help
@@ -36,11 +36,12 @@ then
     # Try to use this password
     # check_pass - func in openstack_api_func.sh
     check_rc_pass "$RC_PASS" "${PWD}/${1}"
+
     # If rc_pass is correct then copy rc-file and add zone in the rc-zone storage
     if [ "$?" -eq "0" ]
     then
       echo "Success. Password is correct"
-      echo "Important: the RC-zone name must not contain space (' '), colon (':') and sharp ('#') characters"
+      echo "Important: the RC-zone name must not contain space (' ') and sharp ('#') characters"
       while [ true ]
       do
         echo "Cpecify name of this RC-zone:"
@@ -56,13 +57,13 @@ then
         if [ "$CHECK_RC_ZONE_RET" -eq "0" ]
         then
           add_rc_zone "$RC_ZONE_NAME" "${PWD}/${1}" "$RC_PASS"
-          echo "RC-zone '${RC_ZONE_NAME}' successfully added"
+          echo "RC-zone was '${RC_ZONE_NAME}' successfully added"
           exit 0
         # If name syntax is incorrect
         elif [ "$CHECK_RC_ZONE_RET" -eq "1" ]
         then
           echo "RC-zone name is incorrect"
-          echo "The RC-zone name must not contain space (' '), colon (':') and sharp ('#') characters"
+          echo "The RC-zone name must not contain space (' ') and sharp ('#') characters"
           echo "Try entering a different name"
         # If zone with the same name was found in rc-zones file (return code: 2)
         else

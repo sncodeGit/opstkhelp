@@ -9,7 +9,7 @@
 ### [Read zone name] -> [Remove this zone record from rc-zones] ->
 ### [Delete this zone rc-file]
 
-# Add shared for all prog from package (for all opstkhelp-*) funcs and vars
+# Add shared for all prog from package (for all opstkhelp-*) vars and performs general functions
 source init.sh
 
 # User need help

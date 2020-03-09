@@ -11,7 +11,7 @@
 ### -- Not update servers-lists files
 ### Other usage should return an error
 
-# Add shared for all prog from package (for all opstkhelp-*) funcs and vars
+# Add shared for all prog from package (for all opstkhelp-*) vars and performs general functions
 source init.sh
 
 # User need help

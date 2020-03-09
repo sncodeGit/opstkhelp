@@ -6,7 +6,7 @@
 ### 2) Switching to the interactive mode: opstkhelp-get-info RC_ZONE_NAME (user enter his command himself)
 ### Other usage should return an error
 
-# Add shared for all prog from package (for all opstkhelp-*)
+# Add shared for all prog from package (for all opstkhelp-*) vars and performs general functions
 source init.sh
 
 # User need help
