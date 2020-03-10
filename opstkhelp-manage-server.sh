@@ -14,9 +14,7 @@
 # Add shared for all prog from package (for all opstkhelp-*) vars and performs general functions
 source init.sh
 
-# User need help
-if [ "$#" -eq "0" ] || [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
-then
+display_help(){
   echo -e "Usage: opstkhelp-manage-server [OPTIONS] ['start'|'stop' SERVER-NAME]\n"
   echo -e "Manage selected server (start or stop)\n"
   echo -e "[SERVER-NAME] - name of target server\n"
@@ -43,5 +41,11 @@ then
   echo -e "opstkhelp-manage-server -w -a start SERVER_NAME"
   echo -e "--- Start server named SERVER_NAME located in any zone."
   echo -e "--- Using servers-lists (cache) to find the right zones."
+}
+
+# User need help
+if [ "$#" -eq "0" ] || [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
+then
+  display_help # Func
   exit 0
 fi

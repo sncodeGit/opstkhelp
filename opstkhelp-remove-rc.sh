@@ -12,15 +12,23 @@
 # Add shared for all prog from package (for all opstkhelp-*) vars and performs general functions
 source init.sh
 
-# User need help
-if [ "$#" -eq "0" ] || [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
-then
+display_help(){
   echo -e "Usage: opstkhelp-remove-rc [RC-ZONE-NAME]"
   echo -e "Usage: opstkhelp-remove-rc [OPTIONS]\n"
   echo -e "Remove RC-zone from the local storage\n"
   echo -e "[RC-ZONE-NAME] - name of the target RC-zone\n"
   echo -e "[OPTIONS]:"
   echo -e "-h, --help            Get this page"
+}
+
+display_usage_error(){
+  echo -e "Usage error.\nUse:\nopstkhelp-remove-rc --help" >&2
+}
+
+# User need help
+if [ "$#" -eq "0" ] || [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
+then
+  display_help # Func
   exit 0
 
 # One arg (zone-name)
@@ -43,6 +51,6 @@ then
 
 # Usage error
 else
-  echo -e "Usage error.\nUse:\nopstkhelp-remove-rc --help" >&2
+  display_usage_error # Func
   exit 1
 fi

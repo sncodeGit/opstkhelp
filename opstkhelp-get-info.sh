@@ -11,9 +11,7 @@
 # Add shared for all prog from package (for all opstkhelp-*) vars and performs general functions
 source init.sh
 
-# User need help
-if [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
-then
+display_help(){
   echo -e "Usage: opstkhelp-get-info (Display names of all added rc-zones)"
   echo -e "Usage: opstkhelp-get-info [RC-ZONE-NAME] (Display all servers from the target rc-zone)"
   echo -e "Usage: opstkhelp-get-info -s [SERVER-NAME] [RC-ZONE-NAME] (Display information about server)"
@@ -23,6 +21,16 @@ then
   echo -e "[SERVER-NAME] - name of the target server\n"
   echo -e "[OTHER-OPTIONS]:"
   echo -e "-h, --help            Get this page"
+}
+
+display_usage_error(){
+  echo -e "Usage error.\nUse:\nopstkhelp-get-info --help" >&2
+}
+
+# User need help
+if [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
+then
+  display_help # Func
   exit 0
 
 # Display all of rc-zones names
@@ -91,6 +99,6 @@ then
 
 # Usage error
 else
-  echo -e "Usage error.\nUse:\nopstkhelp-get-info --help" >&2
+  display_usage_error # Func
   exit 1
 fi

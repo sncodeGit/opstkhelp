@@ -9,9 +9,7 @@
 # Add shared for all prog from package (for all opstkhelp-*) vars and performs general functions
 source init.sh
 
-# User need help
-if [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
-then
+display_help(){
   echo -e "Usage: opstkhelp-source-rc [RC-ZONE-NAME]"
   echo -e "Usage: opstkhelp-source-rc [OPTIONS]\n"
   echo -e "Source (alias command - '.') rc-file of the selected rc-zone"
@@ -21,6 +19,16 @@ then
   echo -e "[RC-ZONE-NAME] - name of the target RC-zone\n"
   echo -e "[OPTIONS]:"
   echo -e "-h, --help            Get this page"
+}
+
+display_usage_error(){
+  echo -e "Usage error.\nUse:\nopstkhelp-source-rc --help" >&2
+}
+
+# User need help
+if [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
+then
+  display_help # Func
   exit 0
 
 # Source rc-file of the zone passed as an argument ($1)
@@ -68,6 +76,6 @@ then
 
 # Usage error
 else
-  echo -e "Usage error.\nUse:\nopstkhelp-source-rc --help" >&2
+  display_usage_error # Func
   exit 1
 fi

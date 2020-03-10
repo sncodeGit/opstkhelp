@@ -14,15 +14,23 @@
 # Add shared for all prog from package (for all opstkhelp-*) vars and performs general functions
 source init.sh
 
-# User need help
-if [ "$#" -eq "0" ] || [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
-then
+display_help(){
   echo -e "Usage: opstkhelp-add-rc [RC-FILE]"
   echo -e "Usage: opstkhelp-add-rc [OPTIONS]\n"
   echo -e "Add new RC-zone to the local storage\n"
   echo -e "[RC-FILE] - path to target rc-file\n"
   echo -e "[OPTIONS]:"
   echo -e "-h, --help            Get this page"
+}
+
+display_usage_error(){
+  echo -e "Usage error or file '$1' not found. \nUse:\nopstkhelp-add-rc --help" >&2
+}
+
+# User need help
+if [ "$#" -eq "0" ] || [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
+then
+  display_help # Func
   exit 0
 
 # One arg and prog can read file (this arg)
@@ -85,6 +93,6 @@ then
 
 # Usage error
 else
-  echo -e "Usage error or file '$1' not found. \nUse:\nopstkhelp-add-rc --help" >&2
+  display_usage_error # Func
   exit 1
 fi;
