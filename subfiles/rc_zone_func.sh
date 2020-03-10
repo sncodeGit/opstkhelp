@@ -94,7 +94,7 @@ check_rc_zone(){
   return 0
 }
 
-### Check password of added rc-zone (according to check_rc_pass func)
+### Check password of added rc-zone (according to api_check_rc_pass func)
 ### Return 0 if password is correct
 ### Return 1 if password is incorrect
 ### Usage: check_zone_pass [RC_ZONE_NAME]
@@ -103,7 +103,7 @@ check_zone_pass(){
   get_zone_pass "$1" # Return GET_ZONE_PASS var
 
   # Check password of this zone
-  check_rc_pass "$GET_ZONE_PASS" "${RC_FILES_STORAGE_PATH}/${1}.sh"
+  api_check_rc_pass "$GET_ZONE_PASS" "${RC_FILES_STORAGE_PATH}/${1}.sh"
   
   # If password is correct
   if [ "$?" -eq 0 ]
@@ -129,28 +129,87 @@ update_servers_list(){
   echo -n "${2}" > ${SERVERS_LISTS_STORAGE_PATH}/${1}-servers
 }
 
-### Get all servers from target rc-zone and their statuses
-### And update servers list of target rc-zone
+### Get all servers from target rc-zone
+### Use OpenStack API and update servers list of target rc-zone
+### Or use servers-lists files (cache)
 ### Return GET_ZONE_SERVERS var with the following sintax:
 ### *** 
-### FIRST_SERVER FIRST_SERVER_STATUS
-### SECOND_SERVER SECOND_SERVER_STATUS
+### FIRST_SERVER_NAME
+### SECOND_SERVER_NAME
 ### ... (etc.)
 ### ***
-### Usage: get_zone_servers [RC_ZONE_NAME]
+### Usage: get_zone_servers [RC_ZONE_NAME] [USE_CACHE_FLAG]
+### If set USE_CACHE_FLAG (== 1) then use servers-lists files (cache)
+### Else (USE_CACHE_FLAG != 1) then use the Openstack API
 get_zone_servers(){
+  # Use cache
+  if [ "$2" -eq "1" ]
+  then
+    GET_ZONE_SERVERS=$(cat ${SERVERS_LISTS_STORAGE_PATH}/${1}-servers)
+  # Use OpenStack API
+  else
+    # Get password of this zone
+    get_zone_pass "$1" # Return GET_ZONE_PASS var
+
+    # Get all servers from target rc-zone
+    # Return API_GET_ALL_SERVERS var
+    api_get_all_servers "$GET_ZONE_PASS" "${RC_FILES_STORAGE_PATH}/${1}.sh"
+
+    # Update servers list for this rc-zone
+    update_servers_list "$1" "$API_GET_ALL_SERVERS"
+
+    GET_ZONE_SERVERS="$API_GET_ALL_SERVERS"
+  fi
+}
+
+### Find rc-zones including server named as an arg
+### Use servers-lists files (cache) or Openstack API
+### Return GET_SERVER_RC_ZONES var with the following sintax:
+### ***
+### FIRST_ZONE_NAME SECOND_ZONE_NAME ...
+### ***
+### Usage: get_server_rc_zones [SERVER_NAME] [USE_CACHE_FLAG]
+### If set USE_CACHE_FLAG (== 1) then use servers-lists files (get_cached_zone_servers func)
+### Else (USE_CACHE_FLAG != 1) then use the Openstack API (get_zone_servers func)
+get_server_rc_zones(){
+  # Returns by func GET_SERVER_FUNC var named as a func (but in upper register)
+  GET_SERVER_VAR=$(echo ${GET_SERVER_FUNC} | tr '[:lower:]' '[:upper:]')
+
+  # Initialization of returned var
+  GET_SERVER_RC_ZONES=""
+
+  get_all_zones # Return values in the GET_ALL_ZONES var
+
+  for ZONE_NAME in ${GET_ALL_ZONES}
+  do
+    get_zone_servers "$1" "$2" # Returns var named as the contents of ${GET_SERVER_VAR}
+    for SERVER_NAME in ${${GET_SERVER_VAR}}
+    do
+      if [ "$SERVER_NAME" == "$1" ]
+      then
+        GET_SERVER_RC_ZONES="${GET_SERVER_RC_ZONES} ${ZONE_NAME}"
+        continue
+      fi
+    done
+  done
+}
+
+### Get information about server
+### Return GET_SERVER_INFO var with the following sintax:
+### ***
+### FIRST_FIELD=FIRST_VALUE
+### SECOND_FIELD=SECOND_VALUE
+### ...
+### ***
+### Usage: get_server_info [RC_ZONE_NAME] [SERVER_NAME]
+get_server_info(){
   # Get password of this zone
   get_zone_pass "$1" # Return GET_ZONE_PASS var
 
-  # Get all servers from target rc-zone
-  # Return GET_ALL_SERVERS var
-  get_all_servers "$GET_ZONE_PASS" "${RC_FILES_STORAGE_PATH}/${1}.sh"
+  # Return API_GET_SERVER_INFO var
+  api_get_server_info "GET_ZONE_PASS" "${RC_FILES_STORAGE_PATH}/${1}.sh" "2"
 
-  # Update servers list for this rc-zone
-  ZONE_SERVERS_NAMES=$(echo -n "${GET_ALL_SERVERS}" | cut -d ' ' -f 1)
-  update_servers_list "$1" "$ZONE_SERVERS_NAMES"
-
-  GET_ZONE_SERVERS="$GET_ALL_SERVERS"
+  GET_SERVER_INFO="API_GET_SERVER_INFO"
 }
 
 ### Source (alias command - '.') zone with name passed as arh
@@ -161,7 +220,7 @@ source_rc_zone(){
   get_zone_pass "$1" # Return GET_ZONE_PASS var
 
   # Source ('.') rc-file of this rc-file
-  source_rc_file "$GET_ZONE_PASS" "${RC_FILES_STORAGE_PATH}/${1}.sh"
+  api_source_rc_file "$GET_ZONE_PASS" "${RC_FILES_STORAGE_PATH}/${1}.sh"
 }
 
 ### Add a new RC-zone 
@@ -185,7 +244,7 @@ add_rc_zone(){
   touch ${SERVERS_LISTS_STORAGE_PATH}/${1}-servers
 
   # Initialization server list
-  get_zone_servers "$1"
+  get_zone_servers "$1" "0"
 }
 
 ### Remove RC-zone from rc-zones file and rc-file from local storage
