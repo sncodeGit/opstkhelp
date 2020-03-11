@@ -40,9 +40,7 @@ then
   # If this zone wasn't found
   if [ "$?" -eq "0" ]
   then
-    echo "Zone '$1' wasn't found in the rc-zones file" >&2
-    echo -e "1) To get all added zones names use:\nopstkhelp-get-info" >&2
-    echo -e "2) To get help use:\nopstkhelp-source-rc --help" >&2
+    display_zone_not_find_error "$1" # Func
     exit 1
 
   # If zone was found
@@ -66,10 +64,7 @@ then
       exit 0
 
     else
-      echo "Password of this zone is incorrect" >&2
-      echo -e "Try to add this zone again\nUse:" >&2
-      echo -e "1) opstkhelp-remove-rc [ZONE-NAME]\n2) opstkhelp-add-rc [RC-FILE]" >&2
-      echo "Attention: when deleting, the current rc-file of this zone will be deleted" >&2
+      display_incorrect_password_error # Func
       exit 1
     fi
   fi

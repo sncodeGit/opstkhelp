@@ -39,8 +39,7 @@ then
   # If name wasn't found in rc-zones files
   if [ "$?" -eq "0" ]
   then
-    echo -e "Zone '$1' wasn't found.\nTry to use:" >&2
-    echo -e "opsthelp-get-info" >&2
+    display_zone_not_find_error "$1" # Func
     exit 1
   # If this zone was found
   else

@@ -49,3 +49,5 @@ then
   display_help # Func
   exit 0
 fi
+
+# Flags parsing

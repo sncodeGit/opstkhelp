@@ -10,7 +10,7 @@ api_source_rc_file(){
 ### Return 1 if password is incorrect
 ### Usage: api_chek_rc_pass [RC_PASS] [RC_FILE]
 api_check_rc_pass(){
-  source_rc_file "$1" "$2"
+  api_source_rc_file "$1" "$2"
 
   STDERR=$(openstack server list --column Name --format value --sort-column Name 2>&1 1> /dev/null)
 
@@ -31,7 +31,7 @@ api_check_rc_pass(){
 ### ***
 ### Usage: api_get_all_servers [RC_PASS] [RC_FILE]
 api_get_all_servers(){
-  source_rc_file "$1" "$2"
+  api_source_rc_file "$1" "$2"
   API_GET_ALL_SERVERS=$(openstack server list --column Name --format value --sort-column Name)
 }
 
@@ -39,6 +39,6 @@ api_get_all_servers(){
 ### Return API_GET_SERVER_INFO var
 ### Usage: api_get_server_info [RC_PASS] [RC_FILE] [SERVER_NAME]
 api_get_server_info(){
-  source "$1" "$2"
+  api_source_rc_file "$1" "$2"
   API_GET_SERVER_INFO=$(openstack server show --format shell ${3})
 }

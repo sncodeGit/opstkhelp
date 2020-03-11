@@ -12,10 +12,10 @@
 source init.sh
 
 display_help(){
-  echo -e "Usage: opstkhelp-get-info (Display names of all added rc-zones)"
-  echo -e "Usage: opstkhelp-get-info [RC-ZONE-NAME] (Display all servers from the target rc-zone)"
-  echo -e "Usage: opstkhelp-get-info -s [SERVER-NAME] [RC-ZONE-NAME] (Display information about server)"
-  echo -e "Usage: opstkhelp-get-info [OTHER-OPTIONS] (Get this page)\n"
+  echo -e "Usage: opstkhelp-get-info                                  Display names of all added rc-zones"
+  echo -e "Usage: opstkhelp-get-info [RC-ZONE-NAME]                   Display all servers from the target rc-zone"
+  echo -e "Usage: opstkhelp-get-info -s [SERVER-NAME] [RC-ZONE-NAME]  Display information about server"
+  echo -e "Usage: opstkhelp-get-info [OTHER-OPTIONS]                  Get this page\n"
   echo -e "Display information about added rc-zones\n"
   echo -e "[RC-ZONE-NAME] - name of the target RC-zone"
   echo -e "[SERVER-NAME] - name of the target server\n"
@@ -49,9 +49,7 @@ then
   # If this zone wasn't found
   if [ "$?" -eq "0" ]
   then
-    echo "Zone '$1' wasn't found in the rc-zones file" >&2
-    echo -e "1) To get all added zones names use:\nopstkhelp-get-info" >&2
-    echo -e "2) To get help use:\nopstkhelp-get-info --help" >&2
+    display_zone_not_find_error "$1" # Func
     exit 1
 
   # If zone was found
@@ -66,10 +64,7 @@ then
       exit 0
 
     else
-      echo "Password of this zone is incorrect" >&2
-      echo -e "Try to add this zone again\nUse:" >&2
-      echo -e "1) opstkhelp-remove-rc [ZONE-NAME]\n2) opstkhelp-add-rc [RC-FILE]" >&2
-      echo "Attention: when deleting, the current rc-file of this zone will be deleted" >&2
+      display_incorrect_password_error # Func
       exit 1
     fi
   fi
@@ -77,25 +72,60 @@ then
 # Get information about server
 elif [[ "$#" -eq "3" ]]
 then
+  # Vars initialization
+  ARG_RC_ZONE_NAME=""
+  ARG_SERVER_NAME=""
+  S_FLAG_FOUND="0"
+
   # Parse SERVER_NAME and RC_ZONE_NAME
   while [ "$1" != "" ]
   do
     if [ "$1" != "-s" ]
     then
-      if [ "$RC_ZONE" != "" ]
+      if [ "$ARG_RC_ZONE_NAME" != "" ]
       then
-        SERVER_NAME="$1"
+        ARG_SERVER_NAME="$1"
       else
-        RC_ZONE_NAME="$1"
+        ARG_RC_ZONE_NAME="$1"
       fi
+    else
+      S_FLAG_FOUND=1
     fi
     shift
   done
 
-  # Return GET_SERVER_INFO var
-  get_server_info "$RC_ZONE_NAME" "$SERVER_NAME"
+  # If '-s' wasn't found
+  if [ "$S_FLAG_FOUND" -eq 0 ]
+  then
+    display_usage_error # Func
+    exit 1
+  fi
 
-  echo "GET_SERVER_INFO"
+  # Search this zone in rc-zones file
+  find_rc_zone "$ARG_RC_ZONE_NAME"
+
+  # If this zone wasn't found
+  if [ "$?" -eq "0" ]
+  then
+    display_zone_not_find_error "$ARG_RC_ZONE_NAME" # Func
+    exit 1
+
+  else
+    # Search this server in the target rc-zone
+    check_server_rc_zone "$ARG_RC_ZONE_NAME" "$ARG_SERVER_NAME"
+
+    # If this server wasn't found
+    if [ "$?" -eq "1" ]
+    then
+      display_server_not_find_in_zone_error "$ARG_RC_ZONE_NAME" "$ARG_SERVER_NAME"
+      exit 1
+
+    else
+      # Return GET_SERVER_INFO var
+      get_server_info "$ARG_RC_ZONE_NAME" "$ARG_SERVER_NAME"
+      echo "$GET_SERVER_INFO"
+    fi
+  fi
 
 # Usage error
 else

@@ -1,3 +1,20 @@
+### Functions list:
+# get_all_zones
+# get_zone_pass
+# check_rc_zone_name
+# find_rc_zone
+# check_rc_zone
+# check_zone_pass
+# update_servers_list
+# get_zone_servers
+# check_server_rc_zone
+# get_server_rc_zones
+# get_server_info
+# source_rc_zone
+# add_rc_zone
+# remove_rc_zone
+
+
 ### Get the names of all added rc-zones
 ### Gets the names from rc-zones file
 ### Return GET_ALL_ZONES var with the following sintax:
@@ -8,8 +25,8 @@
 ### ***
 ### Usage: get_all_zones
 get_all_zones(){
-  # Remove comments and empty strings from rc-zones file
-  GET_ALL_ZONES=$(cat ${RC_ZONE_CONFIG_PATH}/rc-zones | sed -r '/^ *#/d' | sed -r '/^$/d')
+  # Remove comments and empty strings and strings containing only spaces (' ') from rc-zones file
+  GET_ALL_ZONES=$(cat ${RC_ZONE_CONFIG_PATH}/rc-zones | sed -r '/^ *#/d' | sed -r '/^$/d' | sed -r '/^ *$/d')
 }
 
 ### Get the rc-zone password
@@ -162,6 +179,28 @@ get_zone_servers(){
   fi
 }
 
+### Check whether the rc-zone contains a server with this name
+### Use OpenStack API and update servers list of target rc-zone (get_zone_servers func)
+### Return 0 if this rc-zone contains server
+### Return 1 if server wasn't found in this rc-zone
+### Usage: check_server_rc_zone [RC_ZONE_NAME] [SERVER_NAME]
+check_server_rc_zone(){
+  # Don't use cache (servers-list file)
+  # Return GET_ZONE_SERVERS var
+  get_zone_servers "$1" "0"
+
+  for SERVER_NAME in ${GET_ZONE_SERVERS}
+  do
+    if [ "$SERVER_NAME" == "$2" ]
+    then
+      return 0
+    fi
+  done
+
+  # Server wasn't found
+  return 1
+}
+
 ### Find rc-zones including server named as an arg
 ### Use servers-lists files (cache) or Openstack API
 ### Return GET_SERVER_RC_ZONES var with the following sintax:
@@ -172,9 +211,6 @@ get_zone_servers(){
 ### If set USE_CACHE_FLAG (== 1) then use servers-lists files (get_cached_zone_servers func)
 ### Else (USE_CACHE_FLAG != 1) then use the Openstack API (get_zone_servers func)
 get_server_rc_zones(){
-  # Returns by func GET_SERVER_FUNC var named as a func (but in upper register)
-  GET_SERVER_VAR=$(echo ${GET_SERVER_FUNC} | tr '[:lower:]' '[:upper:]')
-
   # Initialization of returned var
   GET_SERVER_RC_ZONES=""
 
@@ -183,7 +219,7 @@ get_server_rc_zones(){
   for ZONE_NAME in ${GET_ALL_ZONES}
   do
     get_zone_servers "$1" "$2" # Returns var named as the contents of ${GET_SERVER_VAR}
-    for SERVER_NAME in ${${GET_SERVER_VAR}}
+    for SERVER_NAME in ${GET_ZONE_SERVERS}
     do
       if [ "$SERVER_NAME" == "$1" ]
       then
@@ -207,9 +243,9 @@ get_server_info(){
   get_zone_pass "$1" # Return GET_ZONE_PASS var
 
   # Return API_GET_SERVER_INFO var
-  api_get_server_info "GET_ZONE_PASS" "${RC_FILES_STORAGE_PATH}/${1}.sh" "2"
+  api_get_server_info "$GET_ZONE_PASS" "${RC_FILES_STORAGE_PATH}/${1}.sh" "$2"
 
-  GET_SERVER_INFO="API_GET_SERVER_INFO"
+  GET_SERVER_INFO="$API_GET_SERVER_INFO"
 }
 
 ### Source (alias command - '.') zone with name passed as arh

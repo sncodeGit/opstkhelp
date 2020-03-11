@@ -29,5 +29,33 @@ get_shared_password(){
   fi
 }
 
+### Display error if the zone password (from rc-passwords file) is incorrect
+### Returns nothing
+### Usage: display_incorrect_password_error
+display_incorrect_password_error(){
+  echo "Password of this zone is incorrect" >&2
+  echo -e "Try to add this zone again\nUse:" >&2
+  echo -e "1) opstkhelp-remove-rc [ZONE-NAME]\n2) opstkhelp-add-rc [RC-FILE]" >&2
+  echo "Attention: when deleting, the current rc-file of this zone will be deleted" >&2
+}
+
+### Display error if the zone is not found in the rc-zones file
+### Returns nothing
+### Usage: display_zone_not_find_error [RC_ZONE_NAME]
+display_zone_not_find_error(){
+  echo -e "Zone '$1' wasn't found in the rc-zones file" >&2
+  echo -e "1) To get all added zones names use:\nopstkhelp-get-info" >&2
+  echo -e "2) To get help use '--help' flag" >&2
+}
+
+### Display error if the server wasn't found in the rc-zone
+### Returns nothing
+### Usage: display_server_not_find_in_zone_error [RC_ZONE_NAME] [SERVER_NAME]
+display_server_not_find_in_zone_error(){
+  echo -e "Server named '$2' wasn't found in the zone named '$1'" >&2
+  echo -e "1) To get all servers contains in the zone use:\nopstkhelp-get-info [RC_ZONE_NAME]"
+  echo -e "2) To get help use '--help' flag" >&2
+}
+
 ### Check the password 
 get_shared_password
