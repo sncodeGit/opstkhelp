@@ -24,7 +24,7 @@ do
 done
 
 mkdir ${LOCAL_DIR}
-exit 0
+
 cp ./init.sh ${LOCAL_DIR}
 cp ./vars.sh ${LOCAL_DIR}
 cp ./headers/rc-zones ${LOCAL_DIR}
