@@ -9,6 +9,8 @@ if [[ "$USERS_ANSWERS" == "y" ]]
 then
   rm -rf ~/.opstkhelp
   which opstkhelp-* | xargs rm -f
+  echo "Succesfully"
+  exit 0
 fi
 
-exit 0
+exit 1
