@@ -10,16 +10,19 @@
 ### 5) Start or stop server (without information about rc-zone): opstkhelp-manage-server -w ['start'|'stop'] SERVER_NAME
 ### -- Not update servers-lists files
 ### Other usage should return an error
+### 1) If the '-z' flag is used with other flags, then these flags are ignored
 
 # Add shared for all prog from package (for all opstkhelp-*) vars and performs general functions
 source init.sh
 
 display_help(){
-  echo -e "Usage: opstkhelp-manage-server [OPTIONS] ['start'|'stop' SERVER-NAME]\n"
+  echo -e "Usage: opstkhelp-manage-server [OPTIONS] ['start'|'stop' SERVER-NAME]"
+  echo -e "Usage: opstkhelp-manage-server [OTHER-OPTIONS]\n"
   echo -e "Manage selected server (start or stop)\n"
   echo -e "[SERVER-NAME] - name of target server\n"
+  echo -e "[OTHER-OPTIONS]:"
+  echo -e "-h, --help            Get this page.\n"
   echo -e "[OPTIONS]:"
-  echo -e "-h, --help            Get this page."
   echo -e "-z                    Specify rc-zone for this server."
   echo -e "                      If this flag is specified, the other flags are ignored."
   echo -e "-a                    If the server's rc-zone is not specified (-z, --rc-zone flag),"
@@ -43,33 +46,90 @@ display_help(){
   echo -e "--- Using servers-lists (cache) to find the right zones."
 }
 
+display_usage_error(){
+  echo -e "Usage error\nUse:\nopstkhelp-manage-server --help" >&2
+}
+
 # User need help
-if [ "$#" -eq "0" ] || [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
+# [opstkhelp-manage-server --help] or [opstkhelp-manage-server -h]
+if [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
 then
   display_help # Func
   exit 0
 fi
 
-check_opt_arg(){
-  
-}
+# Vars initialization
+
+# Values:
+# '1') if flag '-a' is set
+# other) if flag '-a' isn't set
+ARG_ALL_SERVERS_FLAG="0"
+
+# Values:
+# '1') if flag '-w' is set
+# other) if flag '-w' isn't set
+ARG_USE_CASHE_FLAG="0"
+
+# Zone name arg (if flag '-z' are used)
+ARG_RC_ZONE_NAME=""
+
+# Server name arg
+ARG_SERVER_NAME=""
+
+# Server action arg ('start' or 'stop')
+ARG_SERVER_ACTION=""
 
 # Flags parsing
 while getopts "z:aw" opt &> /dev/null
 do
   case "$opt" in
     z)
-      check_opt_arg "$OPTARG"
+      check_flag_arg "$OPTARG"
+      if [ "$?" -eq "1" ]
+      then
+        display_usage_error
+        exit 1
+      fi
+
+      ARG_RC_ZONE_NAME="$OPTARG"
       ;;
     a)
-      echo "find a"
+      ARG_ALL_SERVERS_FLAG="1"
       ;;
     w)
-      echo "find w"
+      ARG_USE_CASHE_FLAG="1"
       ;;
     \?)
-      echo "ill arg"
-      exit 0
+      display_usage_error
+      exit 1
       ;;
   esac
 done
+
+# Shift prog args to arg ['start'|'stop']
+shift $((OPTIND - 1))
+
+ARG_SERVER_ACTION="$1"
+ARG_SERVER_NAME="$2"
+
+# Manage server from specified rc-zone
+# [opstkhelp-manage-server * -z ZONE_NAME 'start'|'stop' SERVER_NAME] (* - other flags)
+if [[ "$ARG_RC_ZONE_NAME" != "" ]]
+then
+  # Search this zone in rc-zones file
+  check_rc_zone_name_correctness "$ARG_RC_ZONE_NAME"
+
+  # Check rc-zone pass
+  check_rc_zone_pass_correctness "$ARG_RC_ZONE_NAME"
+
+  # Search server in rc-zone
+  check_server_rc_zone_correctness "$ARG_RC_ZONE_NAME" "$ARG_SERVER_NAME"
+
+  # Server management
+  manage_rc_zone_server "$ARG_RC_ZONE_NAME" "$ARG_SERVER_NAME" "$ARG_SERVER_ACTION"
+fi
+
+# Usage error
+# Other [opstkhelp-manage-server *]
+display_usage_error # Func
+exit 1

@@ -66,6 +66,7 @@ then
   # Vars initialization
   ARG_RC_ZONE_NAME=""
   ARG_SERVER_NAME=""
+  FIND_S_FLAG="0"
 
   # Parse SERVER_NAME and RC_ZONE_NAME
   while getopts "s:" opt &> /dev/null
@@ -79,6 +80,7 @@ then
           exit 1
         fi
         ARG_SERVER_NAME="$OPTARG"
+        FIND_S_FLAG="1"
         ;;
       \?)
         display_usage_error
@@ -87,21 +89,21 @@ then
     esac
   done
 
-  shift $((OPTIND - 1))
-  ARG_RC_ZONE_NAME="$1"
-
-  # If the parameter sequence is not correct
-  if [ "$1" == "" ]
+  # If the parameter sequence is not correct (-s not find)
+  if [ "$FIND_S_FLAG" == "0" ]
   then
     display_usage_error # Func
     exit 1
   fi
 
+  shift $((OPTIND - 1))
+  ARG_RC_ZONE_NAME="$1"
+
   # Search this zone in rc-zones file
-  check_rc_zone_name_correctness "$1"
+  check_rc_zone_name_correctness "$ARG_RC_ZONE_NAME"
 
   # Check rc-zone pass
-  check_rc_zone_pass_correctness "$1"
+  check_rc_zone_pass_correctness "$ARG_RC_ZONE_NAME"
 
   # Search server in rc-zone
   check_server_rc_zone_correctness "$ARG_RC_ZONE_NAME" "$ARG_SERVER_NAME"

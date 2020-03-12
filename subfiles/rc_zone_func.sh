@@ -248,6 +248,11 @@ get_server_info(){
   GET_SERVER_INFO="$API_GET_SERVER_INFO"
 }
 
+### Usage: manage_rc_zone_server [RC_ZONE_NAME] [SERVER_NAME] [SERVER_ACTION]
+manage_rc_zone_server(){
+
+}
+
 ### Source (alias command - '.') zone with name passed as arh
 ### Returns nothing
 ### Usage: source_rc_zone [RC_ZONE_NAME]
