@@ -248,9 +248,18 @@ get_server_info(){
   GET_SERVER_INFO="$API_GET_SERVER_INFO"
 }
 
+### Manage ('start'|'stop') server located in added rc-zone
+### Returns MANAGE_RC_ZONE_SERVER var containing stderr of OpenStack API command
 ### Usage: manage_rc_zone_server [RC_ZONE_NAME] [SERVER_NAME] [SERVER_ACTION]
 manage_rc_zone_server(){
+  # Get password of this zone
+  get_zone_pass "$1" # Return GET_ZONE_PASS var
 
+  # Server managment
+  # Returns API_MANAGE_SERVER var with stderr of OpenStack API command
+  api_manage_server "$GET_ZONE_PASS" "${RC_FILES_STORAGE_PATH}/${1}.sh" "$2" "$3"
+
+  MANAGE_RC_ZONE_SERVER="$API_MANAGE_SERVER"
 }
 
 ### Source (alias command - '.') zone with name passed as arh

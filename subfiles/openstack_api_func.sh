@@ -42,3 +42,11 @@ api_get_server_info(){
   api_source_rc_file "$1" "$2"
   API_GET_SERVER_INFO=$(openstack server show --format shell ${3})
 }
+
+### Manage ('start'|'stop') server
+### Returns API_MANAGE_SERVER var containing stderr of OpenStack API command
+### Usage: api_manage_server [RC_PASS] [RC_FILE] [SERVER_NAME] [SERVER_ACTION]
+api_manage_server(){
+  api_source_rc_file "$1" "$2"
+  API_MANAGE_SERVER=$(openstack server ${4} -h ${3} 2>&1 1> /dev/null)
+}

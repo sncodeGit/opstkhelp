@@ -15,7 +15,7 @@ display_help(){
   echo -e "Source (alias command - '.') rc-file of the selected rc-zone"
   echo -e "After using this command you can work with openstack API for this zone\n"
   echo -e "Important: The program works interactively by launching a new interactive bash shell"
-  echo -e "To exit interactive mode, use:\nexit\n"
+  echo -e "To exit from interactive mode, use: exit\n"
   echo -e "[RC-ZONE-NAME] - name of the target RC-zone\n"
   echo -e "[OPTIONS]:"
   echo -e "-h, --help            Get this page"

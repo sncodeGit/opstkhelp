@@ -106,6 +106,13 @@ do
   esac
 done
 
+# If in the end of the arguments list not found ['start'|'stop' SERVER_NAME]
+if [[ $((OPTIND - 1 + 2)) -ne "$#" ]]
+then
+  display_usage_error
+  exit 1
+fi
+
 # Shift prog args to arg ['start'|'stop']
 shift $((OPTIND - 1))
 
@@ -127,6 +134,8 @@ then
 
   # Server management
   manage_rc_zone_server "$ARG_RC_ZONE_NAME" "$ARG_SERVER_NAME" "$ARG_SERVER_ACTION"
+  
+  exit 0
 fi
 
 # Usage error
