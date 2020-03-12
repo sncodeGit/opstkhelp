@@ -20,12 +20,12 @@ display_help(){
   echo -e "[SERVER-NAME] - name of target server\n"
   echo -e "[OPTIONS]:"
   echo -e "-h, --help            Get this page."
-  echo -e "-z, --rc-zone         Specify rc-zone for this server."
+  echo -e "-z                    Specify rc-zone for this server."
   echo -e "                      If this flag is specified, the other flags are ignored."
-  echo -e "-a, --all-zones       If the server's rc-zone is not specified (-z, --rc-zone flag),"
+  echo -e "-a                    If the server's rc-zone is not specified (-z, --rc-zone flag),"
   echo -e "                      this flag will perform the necessary action with servers that have specified name"
   echo -e "                      from all zones. If server's rc-zone was specified then that flag will be ignored."
-  echo -e "-w, --without-cache   By default, without using the -z (--rc-zone) flag, the program updates the servers-lists (cache) files of all zones."
+  echo -e "-w                    By default, without using the -z (--rc-zone) flag, the program updates the servers-lists (cache) files of all zones."
   echo -e "                      This behavior can be disabled using this flag. Use this flag only if you are sure"
   echo -e "                      that the list of servers has not been updated since the last updates the servers-lists files of all zones."
   echo -e "Examples:"
@@ -50,4 +50,26 @@ then
   exit 0
 fi
 
+check_opt_arg(){
+  
+}
+
 # Flags parsing
+while getopts "z:aw" opt &> /dev/null
+do
+  case "$opt" in
+    z)
+      check_opt_arg "$OPTARG"
+      ;;
+    a)
+      echo "find a"
+      ;;
+    w)
+      echo "find w"
+      ;;
+    \?)
+      echo "ill arg"
+      exit 0
+      ;;
+  esac
+done

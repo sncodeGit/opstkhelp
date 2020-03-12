@@ -31,9 +31,9 @@ get_shared_password(){
 
 ### Display error if the zone password (from rc-passwords file) is incorrect
 ### Returns nothing
-### Usage: display_incorrect_password_error
+### Usage: display_incorrect_password_error [RC_ZONE_NAME]
 display_incorrect_password_error(){
-  echo "Password of this zone is incorrect" >&2
+  echo "Password of zone '$1' is incorrect" >&2
   echo -e "Try to add this zone again\nUse:" >&2
   echo -e "1) opstkhelp-remove-rc [ZONE-NAME]\n2) opstkhelp-add-rc [RC-FILE]" >&2
   echo "Attention: when deleting, the current rc-file of this zone will be deleted" >&2
@@ -53,8 +53,65 @@ display_zone_not_find_error(){
 ### Usage: display_server_not_find_in_zone_error [RC_ZONE_NAME] [SERVER_NAME]
 display_server_not_find_in_zone_error(){
   echo -e "Server named '$2' wasn't found in the zone named '$1'" >&2
-  echo -e "1) To get all servers contains in the zone use:\nopstkhelp-get-info [RC_ZONE_NAME]"
+  echo -e "1) To get all servers contains in the zone use:\nopstkhelp-get-info [RC_ZONE_NAME]" >&2
   echo -e "2) To get help use '--help' flag" >&2
+}
+
+### Search rc_zone in rc-zones file
+### Returns nothing
+### Usage: check_rc_zone_name_correctness [RC_ZONE_NAME]
+### Exit with code '1' if zone name wasn't found
+check_rc_zone_name_correctness(){
+  find_rc_zone "$1"
+
+  # If this zone wasn't found
+  if [ "$?" -eq "0" ]
+  then
+    display_zone_not_find_error "$1" # Func
+    exit 1
+  fi
+}
+
+### Check rc-zone password correctness
+### Returns nothing
+### Usage: check_rc_zone_pass_correctness [RC_ZONE_NAME]
+### Exit with code '1' if password is incorrect
+check_rc_zone_pass_correctness(){
+  check_zone_pass "$1"
+  # If password is correct
+
+  if [ "$?" -eq "1" ]
+  then
+    display_incorrect_password_error "$1" # Func
+    exit 1
+  fi
+}
+
+### Check whether the rc-zone contains a server
+### Returns nothing
+### Usage: check_server_rc_zone_correctness [RC_ZONE_NAME] [SERVER_NAME]
+### Exit with code '1' if rc-zone not contains a server
+check_server_rc_zone_correctness(){
+  check_server_rc_zone "$1" "$2"
+
+  if [ "$?" -eq "1" ]
+  then
+    display_server_not_find_in_zone_error "$1" "$2"
+    exit 1
+  fi
+}
+
+### When using getopts, the utility does not check
+### whether the argument passed to the (: after) flag is correct.
+### This function checks that the argument is not another flag.
+### Return 1 if arg is incorrect
+### Return 0 if arg is correct
+### Usage: check_flag_arg [ARG]
+check_flag_arg(){
+  if [[ "$1" == '-'* ]] || [[ "$1" == "" ]]
+  then
+    return 1
+  fi
 }
 
 ### Check the password 

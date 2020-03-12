@@ -35,7 +35,7 @@ get_all_zones(){
 ### Usage: get_zone_pass [RC_ZONE_NAME]
 get_zone_pass(){
   ENCODED_PASS=$(cat ${PASSWORDS_STORAGE_PATH}/${1}-password)
-  GET_ZONE_PASS=$(echo -n "$ENCODED_PASS" | openssl enc -d -aes-256-cbc -pbkdf2 -pass "pass:${OPSTKHELP_PASSWORD}")
+  GET_ZONE_PASS=$(echo -n "$ENCODED_PASS" | openssl enc -d -aes-256-cbc -pbkdf2 -pass "pass:${OPSTKHELP_PASSWORD}" 2> /dev/null)
 }
 
 ### Check rc-zone name to correctness

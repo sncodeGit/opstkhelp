@@ -22,7 +22,7 @@ display_help(){
 }
 
 display_usage_error(){
-  echo -e "Usage error.\nUse:\nopstkhelp-remove-rc --help" >&2
+  echo -e "Usage error\nUse:\nopstkhelp-remove-rc --help" >&2
 }
 
 # User need help

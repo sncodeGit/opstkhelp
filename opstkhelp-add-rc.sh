@@ -23,18 +23,22 @@ display_help(){
   echo -e "-h, --help            Get this page"
 }
 
+### Usage: display_usage_error [FILE_NAME]
 display_usage_error(){
-  echo -e "Usage error or file '$1' not found. \nUse:\nopstkhelp-add-rc --help" >&2
+  echo -e "Usage error or file '$1' not found\nUse:\nopstkhelp-add-rc --help" >&2
 }
 
 # User need help
-if [ "$#" -eq "0" ] || [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
+# [opstkhelp-add-rc -h] or [opstkhelp-add-rc --help]
+if [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
 then
   display_help # Func
   exit 0
+fi
 
 # One arg and prog can read file (this arg)
-elif [ "$#" -eq "1" ] && [ -r "$1" ]
+# [opstkhelp-add-rc file_name]
+if [ "$#" -eq "1" ] && [ -r "$1" ]
 then
   while [ true ]
   do
@@ -43,7 +47,7 @@ then
 
     # Try to use this password
     # check_pass - func in openstack_api_func.sh
-    check_rc_pass "$RC_PASS" "${PWD}/${1}"
+    api_check_rc_pass "$RC_PASS" "${PWD}/${1}"
 
     # If rc_pass is correct then copy rc-file and add zone in the rc-zone storage
     if [ "$?" -eq "0" ]
@@ -84,15 +88,17 @@ then
     # If rc_pass is incorrect (check_rc_pass isn't return 0)
     echo "Password is incorrect. Try entering again"
   done
+fi
 
 # One arg and file (this arg) exists, but prog can't read it
-elif [ "$#" -eq "1" ] && [ -f "$1" ]
+# [opstkhelp-add-rc NON_READEBLE]
+if [ "$#" -eq "1" ] && [ -f "$1" ]
 then
   echo "The file was found, but the program cannot read it. Check file permissions" >&2
   exit 1
+fi
 
 # Usage error
-else
-  display_usage_error # Func
-  exit 1
-fi;
+# Other [opstkhelp-add-rc *]
+display_usage_error "$1" # Func
+exit 1

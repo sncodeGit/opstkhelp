@@ -24,111 +24,96 @@ display_help(){
 }
 
 display_usage_error(){
-  echo -e "Usage error.\nUse:\nopstkhelp-get-info --help" >&2
+  echo -e "Usage error\nUse:\nopstkhelp-get-info --help" >&2
 }
 
 # User need help
+# [opstkhelp-get-info -h] or [opstkhelp-get-info --help]
 if [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
 then
   display_help # Func
   exit 0
+fi
 
 # Display all of rc-zones names
-elif [ "$#" -eq "0" ]
+# [opstkhelp-get-info]
+if [ "$#" -eq "0" ]
 then
   get_all_zones # Return values in the GET_ALL_ZONES var
   echo "$GET_ALL_ZONES"
   exit 0
+fi
 
 # Display all servers from the target rc-zone ($1 != '-h', '--help')
-elif [ "$#" -eq "1" ]
+# [opstkhelp-get-info SERVER_NAME]
+if [ "$#" -eq "1" ]
 then
-  # Check this zone for a busy
-  find_rc_zone "$1"
+  # Search rc-zone name in rc-zones file
+  check_rc_zone_name_correctness "$1"
 
-  # If this zone wasn't found
-  if [ "$?" -eq "0" ]
-  then
-    display_zone_not_find_error "$1" # Func
-    exit 1
-
-  # If zone was found
-  else
-    check_zone_pass "$1"
-
-    # If password is correct
-    if [ "$?" -eq "0" ]
-    then
-      get_zone_servers "$1" "0" # Return GET_ZONE_SERVERS
-      echo "$GET_ZONE_SERVERS"
-      exit 0
-
-    else
-      display_incorrect_password_error # Func
-      exit 1
-    fi
-  fi
+  # Check rc-zone password correctness
+  check_rc_zone_pass_correctness "$1"
+  
+  get_zone_servers "$1" "0" # Return GET_ZONE_SERVERS
+  echo "$GET_ZONE_SERVERS"
+  exit 0
+fi
 
 # Get information about server
-elif [[ "$#" -eq "3" ]]
+# [opstkhelp-get-info -s SERVER_NAME RC_ZONE_NAME]
+if [[ "$#" -eq "3" ]]
 then
   # Vars initialization
   ARG_RC_ZONE_NAME=""
   ARG_SERVER_NAME=""
-  S_FLAG_FOUND="0"
 
   # Parse SERVER_NAME and RC_ZONE_NAME
-  while [ "$1" != "" ]
+  while getopts "s:" opt &> /dev/null
   do
-    if [ "$1" != "-s" ]
-    then
-      if [ "$ARG_RC_ZONE_NAME" != "" ]
-      then
-        ARG_SERVER_NAME="$1"
-      else
-        ARG_RC_ZONE_NAME="$1"
-      fi
-    else
-      S_FLAG_FOUND=1
-    fi
-    shift
+    case "$opt" in
+      s)
+        check_flag_arg "$OPTARG"
+        if [ "$?" -eq "1" ]
+        then
+          display_usage_error
+          exit 1
+        fi
+        ARG_SERVER_NAME="$OPTARG"
+        ;;
+      \?)
+        display_usage_error
+        exit 1
+        ;;
+    esac
   done
 
-  # If '-s' wasn't found
-  if [ "$S_FLAG_FOUND" -eq 0 ]
+  shift $((OPTIND - 1))
+  ARG_RC_ZONE_NAME="$1"
+
+  # If the parameter sequence is not correct
+  if [ "$1" == "" ]
   then
     display_usage_error # Func
     exit 1
   fi
 
   # Search this zone in rc-zones file
-  find_rc_zone "$ARG_RC_ZONE_NAME"
+  check_rc_zone_name_correctness "$1"
 
-  # If this zone wasn't found
-  if [ "$?" -eq "0" ]
-  then
-    display_zone_not_find_error "$ARG_RC_ZONE_NAME" # Func
-    exit 1
+  # Check rc-zone pass
+  check_rc_zone_pass_correctness "$1"
 
-  else
-    # Search this server in the target rc-zone
-    check_server_rc_zone "$ARG_RC_ZONE_NAME" "$ARG_SERVER_NAME"
+  # Search server in rc-zone
+  check_server_rc_zone_correctness "$ARG_RC_ZONE_NAME" "$ARG_SERVER_NAME"
 
-    # If this server wasn't found
-    if [ "$?" -eq "1" ]
-    then
-      display_server_not_find_in_zone_error "$ARG_RC_ZONE_NAME" "$ARG_SERVER_NAME"
-      exit 1
+  # Return GET_SERVER_INFO var
+  get_server_info "$ARG_RC_ZONE_NAME" "$ARG_SERVER_NAME"
 
-    else
-      # Return GET_SERVER_INFO var
-      get_server_info "$ARG_RC_ZONE_NAME" "$ARG_SERVER_NAME"
-      echo "$GET_SERVER_INFO"
-    fi
-  fi
+  echo "$GET_SERVER_INFO"
+  exit 0
+fi
 
 # Usage error
-else
-  display_usage_error # Func
-  exit 1
-fi
+# Other [opstkhelp-get-info *]
+display_usage_error # Func
+exit 1
