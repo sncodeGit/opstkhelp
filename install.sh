@@ -12,8 +12,9 @@ while [ true ]
 do
   echo -en "Enter the general password: "
   read -sr OPSTKHELP_GENERAL_PASSWORD
-  echo -en "Repeate general password: "
+  echo -en "\nRepeate general password: "
   read -sr OPSTKHELP_GENERAL_PASSWORD_SECOND
+  echo -en "\n"
   if [[ "$OPSTKHELP_GENERAL_PASSWORD" != "$OPSTKHELP_GENERAL_PASSWORD_SECOND" ]]
   then
     echo "Passwords do not match. Try retyping:" >&2
