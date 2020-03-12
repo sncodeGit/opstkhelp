@@ -27,12 +27,12 @@ LOCAL_BIN_FILES_PATH=$(echo $PATH | sed 'y/:/\n/' | grep $(whoami) | sed '1d')
 cp ./opstkhelp-* $LOCAL_BIN_FILES_PATH
 
 mkdir ~/.opstkhelp
-cp ./init.sh ~/.opstkhelp
-cp ./vars.sh ~/.opstkhelp
-cp ./headers/rc-zones ~/.opstkhelp
+cp ./init.sh ${LOCAL_DIR}
+cp ./vars.sh ${LOCAL_DIR}
+cp ./headers/rc-zones ${LOCAL_DIR}
 # Add users general password
-touch ~/.opstkhelp/shared_password \
-&& echo $OPSTKHELP_GENERAL_PASSWORD | openssl md5 -binary > ~/.opstkhelp/shared_password
+touch ${LOCAL_DIR}/shared_password \
+&& echo $OPSTKHELP_GENERAL_PASSWORD | openssl md5 -binary > ${LOCAL_DIR}/shared_password
 
 mkdir ${SUBFUNCTIONS_PATH}
 cp ./README/subfunctions ${SUBFUNCTIONS_PATH}/README
