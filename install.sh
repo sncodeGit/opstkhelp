@@ -17,8 +17,9 @@ do
   if [[ "$OPSTKHELP_GENERAL_PASSWORD" != "$OPSTKHELP_GENERAL_PASSWORD_SECOND" ]]
   then
     echo "Passwords do not match. Try retyping:" >&2
+  else
+    break
   fi
-  break
 done
 
 LOCAL_BIN_FILES_PATH=$(echo $PATH | sed 'y/:/\n/' | grep $(whoami) | sed '1d')
