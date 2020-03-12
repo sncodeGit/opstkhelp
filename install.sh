@@ -23,9 +23,6 @@ do
   fi
 done
 
-LOCAL_BIN_FILES_PATH=$(echo $PATH | sed 'y/:/\n/' | grep $(whoami) | sed '1d')
-cp ./opstkhelp-* $LOCAL_BIN_FILES_PATH
-
 mkdir ${LOCAL_DIR}
 exit 0
 cp ./init.sh ${LOCAL_DIR}
@@ -47,6 +44,9 @@ cp ./README/rc-passwords ${PASSWORDS_STORAGE_PATH}/README
 
 mkdir ${SERVERS_LISTS_STORAGE_PATH}
 cp ./README/servers-lists ${SERVERS_LISTS_STORAGE_PATH}/README
+
+LOCAL_BIN_FILES_PATH=$(echo $PATH | sed 'y/:/\n/' | grep $(whoami) | sed '1d')
+cp ./opstkhelp-* $LOCAL_BIN_FILES_PATH
 
 echo "Succesfully"
 exit 0
