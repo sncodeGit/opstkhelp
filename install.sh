@@ -26,7 +26,8 @@ done
 LOCAL_BIN_FILES_PATH=$(echo $PATH | sed 'y/:/\n/' | grep $(whoami) | sed '1d')
 cp ./opstkhelp-* $LOCAL_BIN_FILES_PATH
 
-mkdir ~/.opstkhelp
+mkdir ${LOCAL_DIR}
+exit 0
 cp ./init.sh ${LOCAL_DIR}
 cp ./vars.sh ${LOCAL_DIR}
 cp ./headers/rc-zones ${LOCAL_DIR}
