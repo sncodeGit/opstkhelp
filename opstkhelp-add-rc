@@ -12,7 +12,7 @@
 ### [Add zone name to rc-zones] -> [Copy rc-file to local storage]
 
 # Add shared for all prog from package (for all opstkhelp-*) vars and performs general functions
-source init.sh
+source ~/.opstkhelp/init.sh
 
 display_help(){
   echo -e "Usage: opstkhelp-add-rc [RC-FILE]"

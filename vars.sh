@@ -1,9 +1,11 @@
-#
-SUBFUNCTIONS_PATH='./subfiles'
+# Local storage vars
+LOCAL_DIR="~/.opstkhelp"
+SUBFUNCTIONS_PATH="${LOCAL_DIR}/subfunctions"
+RC_FILES_STORAGE_PATH="${LOCAL_DIR}/rc-files"
+RC_ZONE_CONFIG_PATH="${LOCAL_DIR}"
+PASSWORDS_STORAGE_PATH="${LOCAL_DIR}/rc-passwords"
+SERVERS_LISTS_STORAGE_PATH="${LOCAL_DIR}/servers-lists"
+SHARED_PASSWORD_HASH_PATH="${LOCAL_DIR}"
 
-# RC-zone local storage vars
-RC_FILES_STORAGE_PATH='./tmp/rc-files'
-RC_ZONE_CONFIG_PATH='./tmp'
-PASSWORDS_STORAGE_PATH='./tmp/rc-passwords'
-SERVERS_LISTS_STORAGE_PATH='./tmp/servers-lists'
-SHARED_PASSWORD_HASH_PATH='./tmp'
+# Installation vars
+REQUIREMENTS_PATH="./subfiles"

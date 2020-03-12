@@ -1,0 +1,14 @@
+#!/bin/bash
+
+echo "This prog need to uninstall opstkhelp-ustils"
+echo "It will delete all the added rc-zones along with their files and added passwords"
+echo -n "Enter 'y' if you want to do this: "
+read USERS_ANSWERS
+
+if [[ "$USERS_ANSWERS" == "y" ]]
+then
+  rm -rf ~/.opstkhelp
+  which opstkhelp-* | xargs rm -f
+fi
+
+exit 0

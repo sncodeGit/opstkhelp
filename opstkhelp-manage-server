@@ -13,7 +13,7 @@
 ### 1) If the '-z' flag is used with other flags, then these flags are ignored
 
 # Add shared for all prog from package (for all opstkhelp-*) vars and performs general functions
-source init.sh
+source ~/.opstkhelp/init.sh
 
 display_help(){
   echo -e "Usage: opstkhelp-manage-server [OPTIONS] ['start'|'stop' SERVER-NAME]"

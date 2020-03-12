@@ -7,7 +7,7 @@
 ### Other usage should return an error
 
 # Add shared for all prog from package (for all opstkhelp-*) vars and performs general functions
-source init.sh
+source ~/.opstkhelp/init.sh
 
 display_help(){
   echo -e "Usage: opstkhelp-source-rc [RC-ZONE-NAME]"
