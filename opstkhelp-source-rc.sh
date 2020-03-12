@@ -26,51 +26,37 @@ display_usage_error(){
 }
 
 # User need help
+# [opstkhelp-source-rc -h] or [opstkhelp-source-rc --help]
 if [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
 then
   display_help # Func
   exit 0
+fi
 
 # Source rc-file of the zone passed as an argument ($1)
-elif [ "$#" -eq "1" ]
+if [ "$#" -eq "1" ]
 then
-  # Check this zone for a busy
-  find_rc_zone "$1"
+  # Search rc_zone in rc-zones file
+  check_rc_zone_name_correctness "$1"
 
-  # If this zone wasn't found
-  if [ "$?" -eq "0" ]
-  then
-    display_zone_not_find_error "$1" # Func
-    exit 1
+  # Check rc-zone password correctness
+  check_rc_zone_pass_correctness "$1"
 
-  # If zone was found
-  else
-    check_zone_pass "$1"
+  # Source (alias - '.') appropriate rc-file
+  source_rc_zone "$1"
+  # Interactive console for work with openstack API
+  echo "Enter 'exit' for exit from interactive mode"
+  while [ true ]
+  do
+    echo -n "[${1}]> "
+    read USER_INPUT
+    eval "$USER_INPUT"
+  done
 
-    # If password is correct
-    if [ "$?" -eq "0" ]
-    then
-      source_rc_zone "$1"
-      
-      # Interactive console for work with openstack API
-      echo "Enter 'exit' for exit from interactive mode"
-      while [ true ]
-      do
-        echo -n "[${1}]> "
-        read USER_INPUT
-        eval $USER_INPUT
-      done
-
-      exit 0
-
-    else
-      display_incorrect_password_error # Func
-      exit 1
-    fi
-  fi
+  exit 0
+fi
 
 # Usage error
-else
-  display_usage_error # Func
-  exit 1
-fi
+# Other [opstkhelp-source-rc *]
+display_usage_error # Func
+exit 1

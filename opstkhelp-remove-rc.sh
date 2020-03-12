@@ -26,30 +26,26 @@ display_usage_error(){
 }
 
 # User need help
-if [ "$#" -eq "0" ] || [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
+# [opstkhelp-remove-rc -h] or [opstkhelp-remove-rc --help]
+if [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
 then
   display_help # Func
   exit 0
+fi
 
 # One arg (zone-name)
-elif [ "$#" -eq "1" ]
+# [opstkhelp-remove-rc RC_ZONE_NAME]
+if [ "$#" -eq "1" ]
 then
-  # Search this rc-zone name in the rc-zones file
-  find_rc_zone "$1"
-  # If name wasn't found in rc-zones files
-  if [ "$?" -eq "0" ]
-  then
-    display_zone_not_find_error "$1" # Func
-    exit 1
-  # If this zone was found
-  else
-    remove_rc_zone "$1"
-    echo "Succesfully! Zone '$1' was removed"
-    exit 0
-  fi
+  # Search rc_zone in rc-zones file
+  check_rc_zone_name_correctness "$1"
+
+  remove_rc_zone "$1"
+  echo "Succesfully! Zone '$1' was removed"
+  exit 0
+fi
 
 # Usage error
-else
-  display_usage_error # Func
-  exit 1
-fi
+# Other [opstkhelp-remove-rc *]
+display_usage_error # Func
+exit 1
