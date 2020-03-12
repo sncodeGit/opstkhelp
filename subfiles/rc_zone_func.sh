@@ -203,27 +203,23 @@ check_server_rc_zone(){
 
 ### Find rc-zones including server named as an arg
 ### Use servers-lists files (cache) or Openstack API
-### Return GET_SERVER_RC_ZONES var with the following sintax:
-### ***
-### FIRST_ZONE_NAME SECOND_ZONE_NAME ...
-### ***
+### Return GET_SERVER_RC_ZONES array with finds rc-zones (numbering from zero)
 ### Usage: get_server_rc_zones [SERVER_NAME] [USE_CACHE_FLAG]
 ### If set USE_CACHE_FLAG (== 1) then use servers-lists files (get_cached_zone_servers func)
 ### Else (USE_CACHE_FLAG != 1) then use the Openstack API (get_zone_servers func)
 get_server_rc_zones(){
-  # Initialization of returned var
-  GET_SERVER_RC_ZONES=""
-
   get_all_zones # Return values in the GET_ALL_ZONES var
 
-  for ZONE_NAME in ${GET_ALL_ZONES}
+  for ZONE_NAME in $GET_ALL_ZONES
   do
-    get_zone_servers "$1" "$2" # Returns var named as the contents of ${GET_SERVER_VAR}
-    for SERVER_NAME in ${GET_ZONE_SERVERS}
+    get_zone_servers "$ZONE_NAME" "$2" # Returns GET_ZONE_SERVERS var
+    for SERVER_NAME in $GET_ZONE_SERVERS
     do
       if [ "$SERVER_NAME" == "$1" ]
       then
-        GET_SERVER_RC_ZONES="${GET_SERVER_RC_ZONES} ${ZONE_NAME}"
+        # Current array index is equal with array elements number
+        CURRENT_ARRAY_INDEX=${#GET_SERVER_RC_ZONES[*]}
+        GET_SERVER_RC_ZONES[${CURRENT_ARRAY_INDEX}]="${ZONE_NAME}"
         continue
       fi
     done
@@ -250,6 +246,9 @@ get_server_info(){
 
 ### Manage ('start'|'stop') server located in added rc-zone
 ### Returns MANAGE_RC_ZONE_SERVER var containing stderr of OpenStack API command
+### Also return:
+### Return 1 if stderr isn't empty
+### Return 0 if stderr is empty
 ### Usage: manage_rc_zone_server [RC_ZONE_NAME] [SERVER_NAME] [SERVER_ACTION]
 manage_rc_zone_server(){
   # Get password of this zone
@@ -260,6 +259,14 @@ manage_rc_zone_server(){
   api_manage_server "$GET_ZONE_PASS" "${RC_FILES_STORAGE_PATH}/${1}.sh" "$2" "$3"
 
   MANAGE_RC_ZONE_SERVER="$API_MANAGE_SERVER"
+
+  # If stderr of api func is empty
+  if [[ "$MANAGE_RC_ZONE_SERVER" == "" ]]
+  then
+    return 0
+  else
+    return 1
+  fi
 }
 
 ### Source (alias command - '.') zone with name passed as arh

@@ -50,6 +50,28 @@ display_usage_error(){
   echo -e "Usage error\nUse:\nopstkhelp-manage-server --help" >&2
 }
 
+### Manage rc-zone 
+### Return 0 if no errors were found
+### Return 1 if an error occurred while executing the command
+### Usage: manage_rc_zone_server_with_error_check RC_ZONE_NAME SERVER_NAME SERVER_ACTION
+manage_rc_zone_server_with_error_check(){
+  # Server management
+  # Return MANAGE_RC_ZONE_SERVER var contains stderr of OpenStack API command
+  manage_rc_zone_server "$1" "$2" "$3"
+
+  # Error was occured
+  if [[ "$?" -eq "1" ]]
+  then
+    echo "There was a problem with server '$2' from rc-zone '$1':" >&2
+    echo "$MANAGE_RC_ZONE_SERVER" >&2
+    return 1
+  fi
+
+  # If no errors occurred 
+  echo "Server '$2' from rc-zone '$1' was $3 successfully"
+  return 0
+}
+
 # User need help
 # [opstkhelp-manage-server --help] or [opstkhelp-manage-server -h]
 if [[ ("$1" == "-h" || "$1" == "--help") && "$#" -eq "1" ]]
@@ -133,8 +155,85 @@ then
   check_server_rc_zone_correctness "$ARG_RC_ZONE_NAME" "$ARG_SERVER_NAME"
 
   # Server management
-  manage_rc_zone_server "$ARG_RC_ZONE_NAME" "$ARG_SERVER_NAME" "$ARG_SERVER_ACTION"
-  
+  manage_rc_zone_server_with_error_check "$ARG_RC_ZONE_NAME" "$ARG_SERVER_NAME" "$ARG_SERVER_ACTION"
+
+  # Error was occured
+  if [[ "$?" -eq "1" ]]
+  then
+    exit 1
+  fi
+
+  # No errors occured
+  exit 0
+
+# If rc-zone not specified (not find flag '-z')
+# [openstack-manage-server * 'start'|'stop' SERVER_NAME] where * is '-a' or/and '-w' or ''
+else
+  # Get all rc-zones containing the server named as ARG_SERVER_NAME var
+  # Use cache ('-w' flag) or not determined by the value of ARG_USE_CASHE_FLAG var
+  # Return array named GET_SERVER_RC_ZONES (numbering from zero)
+  get_server_rc_zones "$ARG_SERVER_NAME" "$ARG_USE_CASHE_FLAG"
+  ZONES_NUM="${#GET_SERVER_RC_ZONES[*]}"
+
+  # No rc-zones were found
+  if [[ "$ZONES_NUM" -eq "0" ]]
+  then
+    echo -e "No rc-zones containing the server named '$ARG_SERVER_NAME' were found\n" >&2
+    echo -e "Verify the server name is correct" >&2
+    # If user use cache (servers-list file)
+    if [[ "$ARG_USE_CASHE_FLAG" -eq "1" ]]
+    then
+      echo -e "Or try to use openstack-manage-server without '-w' flag\n" >&2
+    fi
+    echo -e "For display all added servers use:" >&2
+    echo -e 'for RC_ZONE in $(opstkhelp-get-info); do opstkhelp-get-info ${RC_ZONE}; done' >&2
+    exit 1
+  fi
+
+  # More then one rc-zone were found
+  # If flag '-a' wasn't found then display error
+  # If flag was found then manage server
+  if [[ "$ZONES_NUM" -ne "1" ]]
+  then
+    # If flag '-a' wasn't found then display error
+    if [[ "$ARG_ALL_SERVERS_FLAG" -eq "0" ]]
+    then
+      echo -e "The server '$ARG_SERVER_NAME' was found in several zones:" >&2
+      echo -e "${GET_SERVER_RC_ZONES[*]}\n" >&2
+      echo -e "Specify rc-zone using '-z' flag or use '-a' flag to choose all zones\n" >&2
+      echo -e "To get help use:\nopstkhelp-manage-server --help"
+      exit 1
+    fi
+
+    ERROR_FLAG="0"
+    for RC_ZONE_NAME in ${GET_SERVER_RC_ZONES[*]}
+    do
+      manage_rc_zone_server_with_error_check "$RC_ZONE_NAME" "$ARG_SERVER_NAME" "$ARG_SERVER_ACTION"
+      if [ "$?" -eq "1" ]
+      then
+        ERROR_FLAG="1"
+      fi
+    done
+
+    # If errors were occured
+    if [ "$ERROR_FLAG" -eq "1" ]
+    then
+      exit 1
+    fi
+
+    # If errors were not occured
+    exit 0
+  fi
+
+  manage_rc_zone_server_with_error_check "${GET_SERVER_RC_ZONES[0]}" "$ARG_SERVER_NAME" "$ARG_SERVER_ACTION"
+
+  # Error was occured
+  if [[ "$?" -eq "1" ]]
+  then
+    exit 1
+  fi
+
+  # No errors occured
   exit 0
 fi
 

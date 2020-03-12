@@ -48,5 +48,5 @@ api_get_server_info(){
 ### Usage: api_manage_server [RC_PASS] [RC_FILE] [SERVER_NAME] [SERVER_ACTION]
 api_manage_server(){
   api_source_rc_file "$1" "$2"
-  API_MANAGE_SERVER=$(openstack server ${4} -h ${3} 2>&1 1> /dev/null)
+  API_MANAGE_SERVER=$(openstack server ${4} ${3} 2>&1 1> /dev/null)
 }
