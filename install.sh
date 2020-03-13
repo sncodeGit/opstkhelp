@@ -45,7 +45,7 @@ cp README/rc-passwords ${PASSWORDS_STORAGE_PATH}/README
 mkdir ${SERVERS_LISTS_STORAGE_PATH}
 cp README/servers-lists ${SERVERS_LISTS_STORAGE_PATH}/README
 
-LOCAL_BIN_FILES_PATH=$(echo $PATH | sed 'y/:/\n/' | grep $(whoami) | sed '1d')
+LOCAL_BIN_FILES_PATH=$(echo $PATH | sed 'y/:/\n/' | grep $(whoami) | head -n 1)
 find . -name "opstkhelp-*" -exec cp \{\} "${LOCAL_BIN_FILES_PATH}" \;
 
 echo "Succesfully"
