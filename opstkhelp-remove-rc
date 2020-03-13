@@ -10,7 +10,7 @@
 ### [Delete this zone rc-file]
 
 # Add shared for all prog from package (for all opstkhelp-*) vars and performs general functions
-source ~/.opstkhelp/init.sh
+source ${HOME}/.opstkhelp/init.sh
 
 display_help(){
   echo -e "Usage: opstkhelp-remove-rc [RC-ZONE-NAME]"
