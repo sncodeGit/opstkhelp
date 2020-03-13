@@ -141,6 +141,14 @@ shift $((OPTIND - 1))
 ARG_SERVER_ACTION="$1"
 ARG_SERVER_NAME="$2"
 
+
+if [[ "$ARG_SERVER_ACTION" != "start" ]] && [[ "$ARG_SERVER_ACTION" != "stop" ]]
+then
+  echo -e "Command '$ARG_SERVER_ACTION' not found" >&2
+  echo -e "To get help use:\nopstkhelp-manage-server --help" >&2
+  exit 1
+fi
+
 # Manage server from specified rc-zone
 # [opstkhelp-manage-server * -z ZONE_NAME 'start'|'stop' SERVER_NAME] (* - other flags)
 if [[ "$ARG_RC_ZONE_NAME" != "" ]]
