@@ -53,7 +53,7 @@ display_usage_error(){
 ### Manage rc-zone 
 ### Return 0 if no errors were found
 ### Return 1 if an error occurred while executing the command
-### Usage: manage_rc_zone_server_with_error_check RC_ZONE_NAME SERVER_NAME SERVER_ACTION
+### Usage: manage_rc_zone_server_with_error_check [RC_ZONE_NAME] [SERVER_NAME] [SERVER_ACTION]
 manage_rc_zone_server_with_error_check(){
   # Server management
   # Return MANAGE_RC_ZONE_SERVER var contains stderr of OpenStack API command
