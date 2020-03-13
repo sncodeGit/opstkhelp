@@ -319,9 +319,9 @@ remove_rc_zone(){
   # The following code fixes this
   # [Get last line from rc-zones] -> [Delete last line] ->
   # -> [Write last line excluding special characters (\n)]
-  LAST_LINE=$(sed -n '$p' tmp/rc-zones)
-  sed -i '$d' tmp/rc-zones
-  echo -n ${LAST_LINE} >> tmp/rc-zones
+  LAST_LINE=$(sed -n '$p' ${RC_ZONE_CONFIG_PATH}/rc-zones)
+  sed -i '$d' ${RC_ZONE_CONFIG_PATH}/rc-zones
+  echo -n ${LAST_LINE} >> ${RC_ZONE_CONFIG_PATH}/rc-zones
 
   # Remove file with password of this rc-zone from rc-passwords storage
   rm ${PASSWORDS_STORAGE_PATH}/${1}-password
