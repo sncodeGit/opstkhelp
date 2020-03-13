@@ -46,7 +46,7 @@ mkdir ${SERVERS_LISTS_STORAGE_PATH}
 cp README/servers-lists ${SERVERS_LISTS_STORAGE_PATH}/README
 
 LOCAL_BIN_FILES_PATH=$(echo $PATH | sed 'y/:/\n/' | grep $(whoami) | sed '1d')
-find -name "opstkhelp-*" -exec cp \{\} "${LOCAL_BIN_FILES_PATH}" \;
+find . -name "opstkhelp-*" -exec cp \{\} "${LOCAL_BIN_FILES_PATH}" \;
 
 echo "Succesfully"
 exit 0
