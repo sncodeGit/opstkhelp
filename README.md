@@ -22,7 +22,14 @@ Zone passwords are encrypted. AES algorithm is used for encryption. For more inf
 - `opstkhelp-manage-server` - start or stop the server with the entered name (from a specific zone or all servers with the entered name from all added zones)
 - `opstkhelp-uninstall` - opstkhelp removal
 
+# Usage
+Before using the program, you must set the global variable `OPSTKHELP_PASSWORD`
+
+Use: `export OPSTKHELP_PASSWORD='your_opstkhelp_password'`
+
 # Installation
+**When installing the program, you must enter the password for the program**
+
 `git clone git@github.com:sncodeGit/opstkhelp.git`
 
 `cd ./opstkhelp && ./install.sh`
