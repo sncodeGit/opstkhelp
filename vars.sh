@@ -1,5 +1,7 @@
-# Local storage vars
+# opstkhelp home dir
 LOCAL_DIR="${HOME}/.opstkhelp"
+
+# Local storage vars
 SUBFUNCTIONS_PATH="${LOCAL_DIR}/subfunctions"
 RC_FILES_STORAGE_PATH="${LOCAL_DIR}/rc-files"
 RC_ZONE_CONFIG_PATH="${LOCAL_DIR}"

@@ -1,6 +1,10 @@
 #!/bin/bash
 
-echo "This prog need to uninstall opstkhelp-ustils"
+# Get installation vars
+# LOCAL_BIN_FILES_PATH - the directory where they were installed opstkhelp-*
+source ${HOME}/.opstkhelp/config
+
+echo "This prog need to uninstall opstkhelp-utils"
 echo "It will delete all the added rc-zones along with their files and added passwords"
 echo -n "Enter 'y' if you want to do this: "
 read USERS_ANSWER
@@ -8,15 +12,10 @@ read USERS_ANSWER
 if [[ "$USERS_ANSWER" == "y" ]]
 then
   rm -rf ${HOME}/.opstkhelp
-  LOCAL_BIN_PATH=$(echo $PATH | sed 'y/:/\n/' | grep $(whoami))
-  for BIN_PATH in ${LOCAL_BIN_PATH}
-  do
-    rm -f $(find ${BIN_PATH} -name "opstkhelp-*")
-  done
-  
+  rm -f $(find ${LOCAL_BIN_FILES_PATH} -name "opstkhelp-*")
   echo "Succesfully"
   exit 0
 fi
 
 echo "Unsuccessfully"
-exit 1
+exit 0
