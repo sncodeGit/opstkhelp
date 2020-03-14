@@ -8,7 +8,11 @@ read USERS_ANSWER
 if [[ "$USERS_ANSWER" == "y" ]]
 then
   rm -rf ${HOME}/.opstkhelp
-  which opstkhelp-* | xargs rm -f
+  LOCAL_BIN_PATH=$(echo $PATH | sed 'y/:/\n/' | grep $(whoami))
+  for BIN_PATH in ${LOCAL_BIN_PATH}
+  do
+    rm -f $(find ${BIN_PATH} -name "opstkhelp-*")
+  done
   
   echo "Succesfully"
   exit 0
