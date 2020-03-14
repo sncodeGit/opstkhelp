@@ -10,7 +10,7 @@ fi
 source ${OWN_PATH}/vars.sh
 
 # Installing the required packages
-cat ${REQUIREMENTS_PATH}/requirements.txt | xargs sudo apt-get install
+cat ${OWN_PATH}/${REQUIREMENTS_PATH}/requirements.txt | xargs sudo apt-get install
 
 # Get users general password
 echo -e "\nThe program uses encryption to store the password for added rc-zones"
@@ -58,7 +58,7 @@ cp ${OWN_PATH}/README/servers-lists ${SERVERS_LISTS_STORAGE_PATH}/README
 # Copy script files (opstkhelp-*) to local directory containing bin files
 
 LOCAL_BIN_FILES_PATH=$(echo $PATH | sed 'y/:/\n/' | grep $(whoami) | head -n 1)
-find ${OWN_PATH} -name "opstkhelp-*" -exec cp ${OWN_PATH}/\{\} "${LOCAL_BIN_FILES_PATH}" \;
+find ${OWN_PATH} -name "opstkhelp-*" -exec cp \{\} "${LOCAL_BIN_FILES_PATH}" \;
 
 # Add installation vars to config file
 echo -ne "\nLOCAL_BIN_FILES_PATH=\"${LOCAL_BIN_FILES_PATH}\"" >> ${LOCAL_DIR}/config

@@ -10,4 +10,4 @@ SERVERS_LISTS_STORAGE_PATH="${LOCAL_DIR}/servers-lists"
 SHARED_PASSWORD_HASH_PATH="${LOCAL_DIR}"
 
 # Installation vars
-REQUIREMENTS_PATH="./subfiles"
+REQUIREMENTS_PATH="subfiles"
