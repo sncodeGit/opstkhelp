@@ -32,9 +32,9 @@ Use: `export OPSTKHELP_PASSWORD='your_opstkhelp_password'`
 
 `git clone git@github.com:sncodeGit/opstkhelp.git`
 
-`cd ./opstkhelp && ./install.sh`
+`opstkhelp/install.sh`
 
-`cd .. && rm -rf opstkhelp/`
+`rm -rf opstkhelp/`
 
 # Uninstallation
 `opstkhelp-uninstall`
