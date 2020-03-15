@@ -68,7 +68,7 @@ manage_rc_zone_server_with_error_check(){
   fi
 
   # If no errors occurred 
-  echo "Server '$2' from rc-zone '$1' was $3 successfully"
+  echo "Server '$2' from rc-zone '$1' was ${3}ed successfully"
   return 0
 }
 
