@@ -28,16 +28,15 @@ Before using the program, you must set the global variable `OPSTKHELP_PASSWORD`
 Use: `export OPSTKHELP_PASSWORD='your_opstkhelp_password'`
 
 # Installation
-**When installing the program, you must enter the password for the program**
+When installing the program, you must enter the password for the program
 
-**Also, during installation, you must enter the password from the sudo user to install dependencies via the apt-get package Manager**
+Additional packages are installed during installation located in **subfiles/requirements.txt**. By default, the `sudo apt-get install`command is used to install packages. To change this behavior need, you need to change the variable `INSTALLATION_COMMAND` located in **vars.sh** file.
 
+- `git clone git@github.com:sncodeGit/opstkhelp.git`
 
-`git clone git@github.com:sncodeGit/opstkhelp.git`
+- `opstkhelp/install.sh`
 
-`opstkhelp/install.sh`
-
-`rm -rf opstkhelp/`
+- `rm -rf opstkhelp/`
 
 # Uninstallation
 `opstkhelp-uninstall`
