@@ -32,10 +32,18 @@ get_all_zones(){
 ### Get the rc-zone password
 ### Gets the password from rc-zones file
 ### Return GET_ZONE_PASS var containing password
+### Exit with code '1' if rc-zone password is incorrect
 ### Usage: get_zone_pass [RC_ZONE_NAME]
 get_zone_pass(){
   ENCODED_PASS=$(cat ${PASSWORDS_STORAGE_PATH}/${1}-password)
   GET_ZONE_PASS=$(echo -n "$ENCODED_PASS" | openssl enc -d -aes-256-cbc -pbkdf2 -pass "pass:${OPSTKHELP_PASSWORD}" 2> /dev/null)
+
+  if [[ "$GET_ZONE_PASS" == "" ]]
+  then
+    echo -e "Discovered problems with the password\nTry adding this zone again" >&2
+    echo -e "Use:\nopstkhelp-remove-rc ${1}\nopstkhelp-add-rc [PATH-TO-RC-FILE]" >&2 
+    exit 1
+  fi
 }
 
 ### Check rc-zone name to correctness
