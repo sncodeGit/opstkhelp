@@ -34,6 +34,8 @@ The utility `opstkhelp-manage-server` has a flag '-w'. This flag determines whet
 
 - To manually update the cache, you can use `opstkhelp-get-info [ZONE-NAME]`
 
+Detailed information about caching can be found in the corresponding schema: `Documentation/cache.png`
+
 # Installation
 When installing the program, you must enter the password for the program
 
