@@ -1,6 +1,8 @@
 # opstkhelp
 CLI utility to simplify working with the OpenStack API
 
+Written entirely in bash
+
 # Short description
 opstkhelp allows you to manage servers from different openstack zones (rc-zone).
 
