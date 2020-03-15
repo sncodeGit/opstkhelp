@@ -28,16 +28,22 @@ Before using the program, you must set the global variable `OPSTKHELP_PASSWORD`
 Use: `export OPSTKHELP_PASSWORD='your_opstkhelp_password'`
 
 # Installation
-**When installing the program, you must enter the password for the program**
+When installing the program, you must enter the password for the program
 
-**Also, during installation, you must enter the password from the sudo user to install dependencies via the apt-get package Manager**
+### Executable files
+opstkhelp-utils is installed in the `~/.opstkhelp directory` in addition to executable files (opstkhelp-* files). Executable files are installed in the first local directory in order from the `PATH`. If you need to install executable files in a different directory, you can set it using the `BIN_FILES_PATH` variable located in `vars.sh` file.
 
 
-`git clone git@github.com:sncodeGit/opstkhelp.git`
+### Additional package
+Additional packages are installed during installation located in `subfiles/requirements.txt`. By default, the `sudo apt-get install`command is used to install packages. To change this behavior need, you need to change the variable `INSTALLATION_COMMAND` located in `vars.sh` file.
 
-`opstkhelp/install.sh`
+### Commands
 
-`rm -rf opstkhelp/`
+- `git clone git@github.com:sncodeGit/opstkhelp.git`
+
+- `opstkhelp/install.sh`
+
+- `rm -rf opstkhelp/`
 
 # Uninstallation
 `opstkhelp-uninstall`
