@@ -30,11 +30,14 @@ Use: `export OPSTKHELP_PASSWORD='your_opstkhelp_password'`
 # Installation
 **When installing the program, you must enter the password for the program**
 
+**Also, during installation, you must enter the password from the sudo user to install dependencies via the apt-get package Manager**
+
+
 `git clone git@github.com:sncodeGit/opstkhelp.git`
 
-`cd ./opstkhelp && ./install.sh`
+`opstkhelp/install.sh`
 
-`cd .. && rm -rf opstkhelp/`
+`rm -rf opstkhelp/`
 
 # Uninstallation
 `opstkhelp-uninstall`
