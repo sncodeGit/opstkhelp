@@ -11,3 +11,5 @@ SHARED_PASSWORD_HASH_PATH="${LOCAL_DIR}"
 
 # Installation vars
 REQUIREMENTS_PATH="subfiles"
+
+# The section is managed automatically by opstkhelp-utils

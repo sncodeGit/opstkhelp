@@ -61,7 +61,7 @@ LOCAL_BIN_FILES_PATH=$(echo $PATH | sed 'y/:/\n/' | grep $(whoami) | head -n 1)
 find ${OWN_PATH} -name "opstkhelp-*" -exec cp \{\} "${LOCAL_BIN_FILES_PATH}" \;
 
 # Add installation vars to config file
-echo -ne "\nLOCAL_BIN_FILES_PATH=\"${LOCAL_BIN_FILES_PATH}\"" >> ${LOCAL_DIR}/config
+echo -ne "\nLOCAL_BIN_FILES_PATH=\"${LOCAL_BIN_FILES_PATH}\"" >> ${LOCAL_DIR}/vars.sh
 
 echo "Succesfully"
 exit 0
