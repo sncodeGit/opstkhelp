@@ -10,7 +10,7 @@ fi
 source ${OWN_PATH}/vars.sh
 
 # Installing the required packages
-cat ${OWN_PATH}/${REQUIREMENTS_PATH}/requirements.txt | xargs sudo apt-get install
+cat ${OWN_PATH}/subfiles/requirements.txt | xargs ${INSTALLATION_COMMAND}
 
 # Get users general password
 echo -e "\nThe program uses encryption to store the password for added rc-zones"
@@ -24,7 +24,7 @@ do
   echo -en "\n"
   if [[ "$OPSTKHELP_GENERAL_PASSWORD" != "$OPSTKHELP_GENERAL_PASSWORD_SECOND" ]]
   then
-    echo "Passwords do not match. Try retyping:" >&2
+    echo "Passwords do not match. Try retyping" >&2
   else
     break
   fi
@@ -38,6 +38,7 @@ cp ${OWN_PATH}/headers/* ${LOCAL_DIR}
 
 cp ${OWN_PATH}/init.sh ${LOCAL_DIR}
 cp ${OWN_PATH}/vars.sh ${LOCAL_DIR}
+
 # Add users general password
 touch ${LOCAL_DIR}/shared_password \
 && echo $OPSTKHELP_GENERAL_PASSWORD | openssl md5 -binary > ${LOCAL_DIR}/shared_password
@@ -56,11 +57,11 @@ mkdir ${SERVERS_LISTS_STORAGE_PATH}
 cp ${OWN_PATH}/README/servers-lists ${SERVERS_LISTS_STORAGE_PATH}/README
 
 # Copy script files (opstkhelp-*) to local directory containing bin files
-
 LOCAL_BIN_FILES_PATH=$(echo $PATH | sed 'y/:/\n/' | grep $(whoami) | head -n 1)
 find ${OWN_PATH} -name "opstkhelp-*" -exec cp \{\} "${LOCAL_BIN_FILES_PATH}" \;
 
 # Add installation vars to config file
+# LOCAL_BIN_FILES_PATH - the directory where they were installed opstkhelp-*
 echo -ne "\nLOCAL_BIN_FILES_PATH=\"${LOCAL_BIN_FILES_PATH}\"" >> ${LOCAL_DIR}/vars.sh
 
 echo "Succesfully"

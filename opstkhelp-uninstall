@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# Get installation vars
 # LOCAL_BIN_FILES_PATH - the directory where they were installed opstkhelp-*
-source ${HOME}/.opstkhelp/config
+source ${HOME}/.opstkhelp/vars.sh
 
 echo "This prog need to uninstall opstkhelp-utils"
 echo "It will delete all the added rc-zones along with their files and added passwords"
