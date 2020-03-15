@@ -57,12 +57,15 @@ mkdir ${SERVERS_LISTS_STORAGE_PATH}
 cp ${OWN_PATH}/README/servers-lists ${SERVERS_LISTS_STORAGE_PATH}/README
 
 # Copy script files (opstkhelp-*) to local directory containing bin files
-LOCAL_BIN_FILES_PATH=$(echo $PATH | sed 'y/:/\n/' | grep $(whoami) | head -n 1)
-find ${OWN_PATH} -name "opstkhelp-*" -exec cp \{\} "${LOCAL_BIN_FILES_PATH}" \;
+if [[ "$BIN_FILES_PATH" == "" ]]
+then
+  BIN_FILES_PATH=$(echo $PATH | sed 'y/:/\n/' | grep $(whoami) | head -n 1)
+fi
+find ${OWN_PATH} -name "opstkhelp-*" -exec cp \{\} "${BIN_FILES_PATH}" \;
 
 # Add installation vars to config file
-# LOCAL_BIN_FILES_PATH - the directory where they were installed opstkhelp-*
-echo -ne "\nLOCAL_BIN_FILES_PATH=\"${LOCAL_BIN_FILES_PATH}\"" >> ${LOCAL_DIR}/vars.sh
+# BIN_FILES_PATH - the directory where they were installed opstkhelp-*
+echo -ne "\nBIN_FILES_PATH=\"${BIN_FILES_PATH}\"" >> ${LOCAL_DIR}/vars.sh
 
 echo "Succesfully"
 exit 0
