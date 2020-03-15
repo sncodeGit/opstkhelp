@@ -29,11 +29,16 @@ Before using the program, you must set the global variable `OPSTKHELP_PASSWORD`
 
 Use: `export OPSTKHELP_PASSWORD='your_opstkhelp_password'`
 
+# Cache
+The utility `opstkhelp-manage-server` has a flag '-w'. This flag determines whether the program's internal cache is being used or not (). The cache contains information about the names of servers that are located in each attached zone. The cache is updated every time the program receives information about the names of added servers. The question of cache validity remains in the user's responsibility (although you can simply not use the '-w ' flag, but it greatly speeds up the utility). When using an invalid cache, semantic and program errors may occur
+
+- To manually update the cache, you can use `opstkhelp-get-info [ZONE-NAME]`
+
 # Installation
 When installing the program, you must enter the password for the program
 
 ### Executable files
-opstkhelp-utils is installed in the `~/.opstkhelp directory` in addition to executable files (opstkhelp-* files). Executable files are installed in the first local directory in order from the `PATH`. If you need to install executable files in a different directory, you can set it using the `BIN_FILES_PATH` variable located in `vars.sh` file.
+opstkhelp-utils is installed in the `~/.opstkhelp` directory in addition to executable files (opstkhelp-* files). Executable files are installed in the first local directory in order from the `PATH`. If you need to install executable files in a different directory, you can set it using the `BIN_FILES_PATH` variable located in `vars.sh` file.
 
 
 ### Additional package
