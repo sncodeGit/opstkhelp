@@ -13,7 +13,8 @@ Using opstkhelp you can:
 - enter any OpenStack API commands for a specific zone, entering only the name of this zone using `opstkhelp-source-rc`
 
 # Encryption
-Zone passwords are encrypted. AES algorithm is used for encryption. For more information see `Documentation/encoding.png`
+Zone passwords are encrypted. AES algorithm is used for encryption. For more information see 
+![](Documentation/encoding.png)
 
 # Utils
 **For more information, use the '--help' flag**
