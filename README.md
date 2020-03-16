@@ -13,7 +13,7 @@ Using opstkhelp you can:
 - enter any OpenStack API commands for a specific zone, entering only the name of this zone using `opstkhelp-source-rc`
 
 # Encryption
-Zone passwords are encrypted. AES algorithm is used for encryption. For more information see 
+Zone passwords are encrypted. AES algorithm is used for encryption. For more information see:
 ![](Documentation/encoding.png)
 
 # Utils
@@ -35,7 +35,8 @@ The utility `opstkhelp-manage-server` has a flag '-w'. This flag determines whet
 
 - To manually update the cache, you can use `opstkhelp-get-info [ZONE-NAME]`
 
-Detailed information about caching can be found in the corresponding schema: `Documentation/cache.png`
+Detailed information about caching can be found in the corresponding schema:
+![](Documentation/cache.png)
 
 # Installation
 When installing the program, you must enter the password for the program
