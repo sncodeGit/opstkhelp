@@ -1,0 +1,3 @@
+1) Update README.md ("Short description" -> "Motivations")
+2) Add makefile
+3) vars.sh -> example.env
