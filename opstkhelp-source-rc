@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ### This prog need to provide the user with the ability to use all the functionality of Openstack API
 ### Functionality:

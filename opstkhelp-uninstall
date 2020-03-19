@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # BIN_FILES_PATH - the directory where they were installed opstkhelp-*
 source ${HOME}/.opstkhelp/vars.sh

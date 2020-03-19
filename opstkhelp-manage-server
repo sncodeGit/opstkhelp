@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ### This prog need to start or stop servers
 ### Functionality:

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Get path to this script from users current directory
 OWN_PATH=$(echo $0 | sed "s/\/install\.sh//")
