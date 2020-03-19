@@ -7,7 +7,7 @@ then
   OWN_PATH="."
 fi
 
-source ${OWN_PATH}/vars.sh
+source ${OWN_PATH}/vars.env
 
 # Installing the required packages
 cat ${OWN_PATH}/subfiles/requirements.txt | xargs ${INSTALLATION_COMMAND}
@@ -37,7 +37,7 @@ mkdir ${LOCAL_DIR}
 cp ${OWN_PATH}/headers/* ${LOCAL_DIR}
 
 cp ${OWN_PATH}/init.sh ${LOCAL_DIR}
-cp ${OWN_PATH}/vars.sh ${LOCAL_DIR}
+cp ${OWN_PATH}/vars.env ${LOCAL_DIR}
 
 # Add users general password
 touch ${LOCAL_DIR}/shared_password \
@@ -65,7 +65,7 @@ find ${OWN_PATH} -name "opstkhelp-*" -exec cp \{\} "${BIN_FILES_PATH}" \;
 
 # Add installation vars to config file
 # BIN_FILES_PATH - the directory where they were installed opstkhelp-*
-echo -ne "\nBIN_FILES_PATH=\"${BIN_FILES_PATH}\"" >> ${LOCAL_DIR}/vars.sh
+echo -ne "\nBIN_FILES_PATH=\"${BIN_FILES_PATH}\"" >> ${LOCAL_DIR}/vars.env
 
 echo "Succesfully"
 exit 0

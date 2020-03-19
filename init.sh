@@ -2,7 +2,7 @@
 ### 'source init.sh' locate in all opstkhelp-* scripts
 
 # Add some shared vars
-source ${HOME}/.opstkhelp/vars.sh
+source ${HOME}/.opstkhelp/vars.env
 # Add some func for work with Openstack API
 source ${SUBFUNCTIONS_PATH}/openstack_api_func.sh
 # Add some func for work with local rc-zone storage

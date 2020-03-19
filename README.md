@@ -42,11 +42,11 @@ Detailed information about caching can be found in the corresponding schema:
 When installing the program, you must enter the password for the program
 
 ### Executable files
-opstkhelp-utils is installed in the `~/.opstkhelp` directory in addition to executable files (opstkhelp-* files). Executable files are installed in the first local directory in order from the `PATH`. If you need to install executable files in a different directory, you can set it using the `BIN_FILES_PATH` variable located in `vars.sh` file.
+opstkhelp-utils is installed in the `~/.opstkhelp` directory in addition to executable files (opstkhelp-* files). Executable files are installed in the first local directory in order from the `PATH`. If you need to install executable files in a different directory, you can set it using the `BIN_FILES_PATH` variable located in `vars.env` file.
 
 
 ### Additional package
-Additional packages are installed during installation located in `subfiles/requirements.txt`. By default, the `sudo apt-get install`command is used to install packages. To change this behavior need, you need to change the variable `INSTALLATION_COMMAND` located in `vars.sh` file.
+Additional packages are installed during installation located in `subfiles/requirements.txt`. By default, the `sudo apt-get install`command is used to install packages. To change this behavior need, you need to change the variable `INSTALLATION_COMMAND` located in `vars.env` file.
 
 ### Commands
 
