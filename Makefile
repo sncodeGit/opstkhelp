@@ -65,8 +65,3 @@ copy_scripts_to_bin_dir:
 	fi; \
 	cp opstkhelp-* $${INSTALL_PATH}; \
 	echo -ne "\nBIN_FILES_PATH=\"$${INSTALL_PATH}\"" >> $(LOCAL_DIR)/vars.env;
-
-# Remove this dir
-remove:
-	rm -rf ../opstkhelp 2> /dev/null
-	cd ../
