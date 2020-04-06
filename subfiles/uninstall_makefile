@@ -1,0 +1,15 @@
+# Include opstkhelp vars as a Makefile vars
+include $(HOME)/.opstkhelp/vars.env
+
+# BIN_FILES_PATH - the directory where they were installed opstkhelp-*
+
+uninstall: remove_local_dir remove_bin_files
+    echo Succesfully
+
+.PHONY: uninstall remove_local_dir remove_bin_files
+
+remove_local_dir:
+    rm -rf $(HOME)/.opstkhelp
+
+remove_bin_files:
+    rm -f $${BIN_FILES_PATH}/opstkhelp-*
