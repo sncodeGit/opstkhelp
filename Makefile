@@ -1,5 +1,5 @@
 # Include opstkhelp vars as a Makefile vars
-include vars.env
+include install.env
 
 # Makefile system vars
 SHELL := /usr/bin/env bash
