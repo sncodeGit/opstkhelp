@@ -1,4 +1,0 @@
-1) Update README.md ("Short description" -> "Motivations")
-2) Add makefile
-Done:3) vars.sh -> vars.env
-Done:4) `#!/bin/bash` -> `#!/usr/bin/env bash`
