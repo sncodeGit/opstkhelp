@@ -4,10 +4,10 @@ include vars.env
 # Makefile system vars
 SHELL := /usr/bin/env bash
 
+.PHONY: install install_packages set_general_password copy_files_to_local_dir copy_scripts_to_bin_dir
+
 install: install_packages set_general_password copy_files_to_local_dir copy_scripts_to_bin_dir remove
 	@ echo "Succesfully"
-
-.PHONY: install install_packages set_general_password copy_files_to_local_dir copy_scripts_to_bin_dir
 
 # Installing the required packages
 install_packages: subfiles/requirements.txt
