@@ -6,7 +6,7 @@ SHELL := /usr/bin/env bash
 
 .PHONY: install install_packages set_general_password copy_files_to_local_dir copy_scripts_to_bin_dir
 
-install: install_packages set_general_password copy_files_to_local_dir copy_scripts_to_bin_dir remove
+install: install_packages set_general_password copy_files_to_local_dir copy_scripts_to_bin_dir
 	@ echo "Succesfully"
 
 # Installing the required packages
