@@ -7,7 +7,7 @@ read USERS_ANSWER
 
 if [[ "$USERS_ANSWER" == "y" ]]
 then
-  cd $(HOME)/.opstkhelp/vars.env && \
+  cd ${HOME}/.opstkhelp &> /dev/null && \
   make uninstall
   exit 0
 fi
