@@ -3,13 +3,13 @@ CLI utility to simplify working with the OpenStack API
 
 Written entirely in bash
 
-# Short description
-opstkhelp allows you to manage servers from different openstack zones (rc-zone).
+# Motivation
+Opstkhelp allows you to manage servers from different openstack zones (rc-zone).
 
 You add all your rc-zones by passing opstkhelp the password and rc-file of that zone. Then you can manage all zones using a single program password, which is set during the installation of opstkhelp.
 
 Using opstkhelp you can:
-- start and stop servers with the same name located in different zones with `opstkhelp-manage-server`
+- start and stop servers with the same name located in different zones with `opstkhelp-manage-server` using just one command
 - enter any OpenStack API commands for a specific zone, entering only the name of this zone using `opstkhelp-source-rc`
 
 # Encryption
@@ -41,20 +41,22 @@ Detailed information about caching can be found in the corresponding schema:
 # Installation
 When installing the program, you must enter the password for the program
 
+The installation is performed with the utility `make`
+
 ### Executable files
-opstkhelp-utils is installed in the `~/.opstkhelp` directory in addition to executable files (opstkhelp-* files). Executable files are installed in the first local directory in order from the `PATH`. If you need to install executable files in a different directory, you can set it using the `BIN_FILES_PATH` variable located in `vars.sh` file.
+opstkhelp-utils is installed in the `~/.opstkhelp` directory in addition to executable files (opstkhelp-* files). Executable files are installed in the first local directory in order from the `PATH`. If you need to install executable files in a different directory, you can set it using the `BIN_FILES_PATH` variable located in `install.env` file.
 
 
 ### Additional package
-Additional packages are installed during installation located in `subfiles/requirements.txt`. By default, the `sudo apt-get install`command is used to install packages. To change this behavior need, you need to change the variable `INSTALLATION_COMMAND` located in `vars.sh` file.
+Additional packages are installed during installation located in `subfiles/requirements.txt`. By default, the `sudo apt-get install` command is used to install packages. To change this behavior, you need to change the variable `INSTALLATION_COMMAND` located in `install.env` file.
 
 ### Commands
 
 - `git clone git@github.com:sncodeGit/opstkhelp.git`
 
-- `opstkhelp/install.sh`
+- `cd opstkhelp && make install`
 
-- `rm -rf opstkhelp/`
+- `cd .. && rm -rf opstkhelp/`
 
 # Uninstallation
 `opstkhelp-uninstall`

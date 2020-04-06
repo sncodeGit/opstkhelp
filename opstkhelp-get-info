@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ### This prog need to get info about rc-zones (and servers) added earlier
 ### Functionality:

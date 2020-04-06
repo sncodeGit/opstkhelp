@@ -1,7 +1,4 @@
-#!/bin/bash
-
-# BIN_FILES_PATH - the directory where they were installed opstkhelp-*
-source ${HOME}/.opstkhelp/vars.sh
+#!/usr/bin/env bash
 
 echo "This prog need to uninstall opstkhelp-utils"
 echo "It will delete all the added rc-zones along with their files and added passwords"
@@ -10,11 +7,10 @@ read USERS_ANSWER
 
 if [[ "$USERS_ANSWER" == "y" ]]
 then
-  rm -rf ${HOME}/.opstkhelp
-  rm -f $(find ${BIN_FILES_PATH} -name "opstkhelp-*")
-  echo "Succesfully"
+  cd ${HOME}/.opstkhelp && \
+  make uninstall && cd .. && rm -rf ${HOME}/.opstkhelp
   exit 0
 fi
 
-echo "Unsuccessfully"
+echo "Cancelled"
 exit 0
