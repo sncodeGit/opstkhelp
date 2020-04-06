@@ -68,4 +68,5 @@ copy_scripts_to_bin_dir:
 
 # Remove this dir
 remove:
-	rm -rf ../opstkhelp
+	rm -rf ../opstkhelp 2> /dev/null
+	cd ../
