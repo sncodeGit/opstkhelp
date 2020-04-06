@@ -9,7 +9,7 @@ uninstall: remove_local_dir remove_bin_files
 .PHONY: uninstall remove_local_dir remove_bin_files
 
 remove_local_dir:
-    rm -rf $(HOME)/.opstkhelp
+    rm -rf $${HOME}/.opstkhelp
 
 remove_bin_files:
-    rm -f $${BIN_FILES_PATH}/opstkhelp-*
+    rm -f $(BIN_FILES_PATH)/opstkhelp-*
