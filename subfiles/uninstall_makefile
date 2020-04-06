@@ -5,11 +5,8 @@ include $(HOME)/.opstkhelp/vars.env
 
 .PHONY: uninstall remove_local_dir remove_bin_files
 
-uninstall: remove_local_dir remove_bin_files
-    @ echo Succesfully
-
-remove_local_dir:
-    @ rm -rf $(HOME)/.opstkhelp
+uninstall: remove_bin_files
+	@ echo Succesfully
 
 remove_bin_files:
-    @ rm -f $(BIN_FILES_PATH)/opstkhelp-*
+	@ rm -f $(BIN_FILES_PATH)/opstkhelp-*

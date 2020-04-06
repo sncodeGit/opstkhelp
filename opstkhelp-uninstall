@@ -7,8 +7,8 @@ read USERS_ANSWER
 
 if [[ "$USERS_ANSWER" == "y" ]]
 then
-  cd ${HOME}/.opstkhelp &> /dev/null && \
-  make uninstall
+  cd ${HOME}/.opstkhelp && \
+  make uninstall && cd .. && rm -rf ${HOME}/.opstkhelp
   exit 0
 fi
 
